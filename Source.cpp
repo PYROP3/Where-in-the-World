@@ -44,19 +44,19 @@ int main() {
 			{
 			case administrador:
 				system("cls");
-				printf("\n\tOpção escolhida: 1. Administrador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\n\t");
+				printf("\n\tOpï¿½ï¿½o escolhida: 1. Administrador\n\tEscolha uma das opï¿½ï¿½es abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\n\t");
 				scanf("%i", &casesadm);
 				switch (casesadm) {
 				case cadastroadm:
 					system("cls");
 					if (temosAdm)
 					{
-						printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
+						printf("\n\tAdministrador jï¿½ cadastrado! Desculpe\n\tRetornando ao menu...");
 						Sleep(3000);
 					}
 					else
 					{
-						printf("\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
+						printf("\tOpï¿½ï¿½o 1. Cadastro de Administrador:\n\n\tNome: ");
 						getchar();
 						fgets(adm.nome, 30, stdin);
 						printf("\n\tLogin: ");
@@ -82,7 +82,7 @@ int main() {
 					break;
 				case chglogin:
 					system("cls");
-					printf("\tOpção 2. Alterar dados do Administrador:\n\n\tDigite o login do administrador atual: ");
+					printf("\tOpï¿½ï¿½o 2. Alterar dados do Administrador:\n\n\tDigite o login do administrador atual: ");
 					getchar();
 					fgets(adm.login, 30, stdin);
 					printf("\n\tSenha do administrador atual: ");
@@ -99,7 +99,7 @@ int main() {
 					system("cls");
 					if (strcmp(adm.login, aux.login) && strcmp(adm.senha, aux.senha))
 					{
-						printf("\n\tLogin bem sucedido!\n\tQuais das opções deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha\n\t4. Excluir credencial de administrador\n\t5. Sair\n\n\t");
+						printf("\n\tLogin bem sucedido!\n\tQuais das opï¿½ï¿½es deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha\n\t4. Excluir credencial de administrador\n\t5. Sair\n\n\t");
 						scanf("%i",&caseschglogin);
 						switch (caseschglogin)
 						{
@@ -124,12 +124,12 @@ int main() {
 					break;
 				case cadastrocasos:
 					system("cls");
-					printf("\tOpção 3. Cadastrar casos:\n\n");
+					printf("\tOpï¿½ï¿½o 3. Cadastrar casos:\n\n");
 					system("cls");
 					break;
 				case removecasos:
 					system("cls");
-					printf("\tOpção 4. Remover casos:\n\n");
+					printf("\tOpï¿½ï¿½o 4. Remover casos:\n\n");
 					system("cls");
 					break;
 				}
@@ -163,7 +163,11 @@ void cripto(char* key, char* orig, char* cript) {
 			cript[i] = MI + (cl + ck - MI - MI) % 26;
 			j = (j + 1) % keylen;
 		}
-		else  //simbolo
-			cript[i] = orig[i];
+		else { //simbolo
+			if (cl == '\n')
+				cript[i] = '\0';
+			else
+				cript[i] = (char)((int) orig[i] + 1);
+		}
 	}
 }
