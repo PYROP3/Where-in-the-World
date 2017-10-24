@@ -37,14 +37,13 @@ int main() {
 	enum loginType log;
 	admOptions casesadm;
 	chgLoginOptions caseschglogin;
-	bool temosAdm = 0;
-	int opcaojogador;
+	playerOptions opcaojogador;
 	FILE *admin;
 	
-
 	printf("\n\tBem vindo ao jogo Where in the world!");
 	do {
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
+
 		scanf("%i", &log);
 		if (log != sair) {
 			switch (log)
@@ -52,15 +51,13 @@ int main() {
 			case administrador:
 				system("cls");
 				printf("\n\tOpção escolhida: 1. Administrador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\n\tOpcao desejada: ");
-
 				scanf("%i", &casesadm);
 				switch (casesadm) {
 				case cadastroadm:
 					system("cls");
-					if (temosAdm)
+					if (fopen("logincripto.dat", "r+b") != NULL)
 					{
 						printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
-
 						Sleep(3000);
 					}
 					else
@@ -69,25 +66,17 @@ int main() {
 						getchar();
 						fgets(adm.nome, 30, stdin);
 						printf("\n\tLogin: ");
-						//getchar();
 						fgets(adm.login, 30, stdin);
 						printf("\n\tSenha: ");
-						//getchar();
 						fgets(adm.senha, 30, stdin);
-						/*printf("\n\tChave da criptografia: ");
-						getchar();*/
-
-						//fgets(adm.keycripto, 30, stdin);
-
 						cripto(adm.keycripto, adm.nome, aux.nome);
 						cripto(adm.keycripto, adm.login, aux.login);
 						cripto(adm.keycripto, adm.senha, aux.senha);
 						admin = fopen("logincripto.dat", "w+b");
 						if (admin == NULL)
 							printf("Erro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
-						fwrite(&adm, sizeof(adminType), 1, admin);
+						fwrite(&aux, sizeof(adminType), 1, admin);
 						fclose(admin);
-						temosAdm = 1;
 					}
 					system("cls");
 					break;
@@ -105,7 +94,7 @@ int main() {
 					if (admin == NULL)
 						system("cls");
 					printf("\n\tErro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
-					fread(&adm, sizeof(adminType), 1, admin);
+					fread(&aux, sizeof(adminType), 1, admin);
 					fclose(admin);
 					system("cls");
 					if (strcmp(adm.login, aux.login) && strcmp(adm.senha, aux.senha))
