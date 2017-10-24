@@ -22,6 +22,10 @@ enum admOptions {
 enum chgLoginOptions {
 	chgn = 1, chgl, chgs, deladm, chgsair
 };
+enum playerOptions {
+	cadastrojogador = 1, alterarcadastro, jogar
+};
+
 
 void cripto(char* key, char* orig, char* cript);
 
@@ -33,8 +37,9 @@ int main() {
 	enum loginType log;
 	admOptions casesadm;
 	chgLoginOptions caseschglogin;
+	playerOptions opcaojogador;
 	FILE *admin;
-
+	
 	printf("\n\tBem vindo ao jogo Where in the world!");
 	do {
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
@@ -132,6 +137,20 @@ int main() {
 				break;
 			case jogador:
 				system("cls");
+				printf("\n\tOpção escolhida: 2. Jogador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Jogador\n\t2. Alterar cadastro do Jogador\n\t3. Jogar\n\n\tOpcao desejada: ");
+				scanf("%i", &opcaojogador);
+
+				switch (opcaojogador)
+				{
+				case cadastrojogador:
+					break;
+				case alterarcadastro:
+					break;
+				case jogar:
+					break;
+				default:
+					break;
+				}
 				FILE *p = fopen("players.txt", "a");
 				fclose(p);
 				system("cls");
@@ -163,7 +182,7 @@ void cripto(char* key, char* orig, char* cript) {
 			if (cl == '\n')
 				cript[i] = '\0';
 			else
-				cript[i] = (char)((int) orig[i] + 1);
+				cript[i] = (char)((int)orig[i] + 1);
 		}
 	}
 }
