@@ -46,6 +46,7 @@ int main() {
 			case administrador:
 				system("cls");
 				printf("\n\tOpção escolhida: 1. Administrador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\n\tOpcao desejada: ");
+
 				scanf("%i", &casesadm);
 				switch (casesadm) {
 				case cadastroadm:
@@ -53,6 +54,7 @@ int main() {
 					if (temosAdm)
 					{
 						printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
+
 						Sleep(3000);
 					}
 					else
@@ -104,6 +106,7 @@ int main() {
 					{
 						printf("\n\tLogin bem sucedido!\n\tQuais das opções deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha\n\t4. Excluir credencial de administrador\n\t5. Sair\n\n\tOpcao desejada: ");
 						scanf("%i", &caseschglogin);
+
 						switch (caseschglogin)
 						{
 						case chgn:
@@ -166,7 +169,11 @@ void cripto(char* key, char* orig, char* cript) {
 			cript[i] = MI + (cl + ck - MI - MI) % 26;
 			j = (j + 1) % keylen;
 		}
-		else  //simbolo
-			cript[i] = orig[i];
+		else { //simbolo
+			if (cl == '\n')
+				cript[i] = '\0';
+			else
+				cript[i] = (char)((int) orig[i] + 1);
+		}
 	}
 }
