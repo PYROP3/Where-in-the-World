@@ -13,7 +13,7 @@ struct adminType {
 	char keycripto[13];
 };
 
-struct tipoJogador{
+struct tipoJogador {
 	char nome[30];
 	char login[30];
 	char senha[30];
@@ -50,11 +50,13 @@ int main() {
 	char cadastro[100];
 	char string[30], resposta;
 	int i;
-	bool loginvalido = true;
+	bool valido = true;
 	char ajuda = 'N';
 
-	printf("\n\tBem vindo ao jogo Where in the world!");
 	do {
+		system("cls");
+
+		printf("\n\tBem vindo ao jogo Where in the world!");
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
 
 		scanf("%i", &log);
@@ -176,6 +178,7 @@ int main() {
 
 					printf("\n\tCadastro realizado com sucesso! Aguarde um momento...");
 					Sleep(3000);
+					fclose(players);
 
 					break;
 
@@ -185,7 +188,7 @@ int main() {
 
 					system("cls");
 
-					loginvalido = true;
+					valido = true;
 
 					do {
 
@@ -199,18 +202,19 @@ int main() {
 
 							if (strcmp(jogador.login, auxlogin.login) == 0)
 							{
-								loginvalido = true;
+								valido = true;
 								break;
 							}
 							else
 							{
-								loginvalido = false;
+								valido = false;
 							}
 
 						} while (!feof(players));		// /\
 
-						if (loginvalido == false)
+						if (valido == false)
 						{
+							rewind(players);
 							system("cls");
 							printf("\n\tLogin Invalido...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
 							getchar();
@@ -223,37 +227,48 @@ int main() {
 							break;
 						}
 
-					} while (loginvalido == false && ajuda == 'S' || ajuda == 's');
+					} while (valido == false && ajuda == 'S' || ajuda == 's');
 
-					rewind(players);
+					//rewind(players);
 
-						if (loginvalido == true)
+					if (valido == true)
+					{
+
+						do
 						{
+							system("cls");
+
+							printf("\n\tOla %s\n", jogador.nome);
 							printf("\n\tDigite sua senha: ");
 							scanf("%s", &auxlogin.senha);
 
-							do {
-								fread(&jogador, sizeof(jogador), 1, players);  //Verifica se a senha esta correta
+							if (strcmp(jogador.senha, auxlogin.senha) == 0)
+							{
+								system("cls");
+								printf("\n\tLogin efetuado com sucesso!");
+								printf("\n\n\tSeja bem vindo %s, Atualmente voce tem %i pontos", jogador.nome, jogador.pontos);
+								printf("\n\n\tVoltando para paginal inicial...");
+								Sleep(5000);
+								break;
+							}
+							else
+							{
+								rewind(players);
 
-								if (strcmp(jogador.senha, auxlogin.senha) == 0)
-								{
-									system("cls");
-									printf("\n\tLogin efetuado com sucesso!");
-									printf("\n\n\tSeja bem vindo %s, Atualmente voce tem %i pontos", jogador.nome, jogador.pontos);
-									printf("\n\n\tVoltando para paginal inicial...");
-									Sleep(5000);
-									break;
-								}
+								system("cls");
+								printf("\n\tSenha Invalida...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
+								getchar();
+								scanf("%c", &resposta);
+							}
 
-							} while (feof(players));				//     UP
-						}
-						
-						fclose(players);
-
-						break;
+						} while (resposta != 'n' || resposta != 'N');
 					}
+					fclose(players);
 
+					break;
 				}
+
+			}
 		}
 	} while (log != sair);
 
