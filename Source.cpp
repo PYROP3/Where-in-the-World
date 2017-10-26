@@ -51,6 +51,7 @@ int main() {
 	char string[30], resposta;
 	int i;
 	bool valido = true, login = true;
+
 	char ajuda = 'N';
 
 	do {
@@ -167,6 +168,9 @@ int main() {
 
 					printf("\n\tOpção 1. Cadastro novo Jogador:\n\n\tDigite seu primeiro nome: ");
 					scanf("%s", jogador.nome);
+
+					printf("\n\tDigite seu login: ");
+					scanf("%s", jogador.login);
 
 					do  //INICIO VERIFICAÇÃO NOME EXISTENTE
 					{
