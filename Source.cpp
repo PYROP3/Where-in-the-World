@@ -50,7 +50,8 @@ int main() {
 	char cadastro[100];
 	char string[30], resposta;
 	int i;
-	bool valido = true;
+	bool valido = true, login = true;
+
 	char ajuda = 'N';
 
 	do {
@@ -167,8 +168,77 @@ int main() {
 
 					printf("\n\tOpção 1. Cadastro novo Jogador:\n\n\tDigite seu primeiro nome: ");
 					scanf("%s", jogador.nome);
+
 					printf("\n\tDigite seu login: ");
 					scanf("%s", jogador.login);
+
+					do  //INICIO VERIFICAÇÃO NOME EXISTENTE
+					{
+						rewind(players);
+
+						do
+						{
+
+							fread(&auxlogin, sizeof(auxlogin), 1, players);
+
+							if (strcmp(auxlogin.nome, jogador.nome) == 0)
+							{
+								login = false;
+								break;
+							}
+							else
+							{
+								login = true;
+							}
+
+						} while (!feof(players));
+
+						if (login == false)
+						{
+							system("cls");
+
+							printf("\n\tNome ja cadastrado!\n");
+							printf("\n\tTente digitar diferente: ");
+							scanf("%s", jogador.nome);
+						}
+
+					} while (login == false);  //FIM VERIFICAÇÃO NOME EXISTENTE
+
+					printf("\n\tDigite seu login: ");
+					scanf("%s", jogador.login);
+
+					do  //INICIO VERIFICAÇÃO LOGIN EXISTENTE
+					{
+						rewind(players);
+
+						do 
+						{
+
+							fread(&auxlogin, sizeof(auxlogin), 1, players);
+
+							if (strcmp(auxlogin.login, jogador.login) == 0)
+							{
+								login = false;
+								break;
+							}
+							else
+							{
+								login = true;
+							}
+
+						} while (!feof(players));
+
+						if (login == false)
+						{
+							system("cls");
+
+							printf("\n\tLogin ja cadastrado!\n");
+							printf("\n\tDigite outro login: ");
+							scanf("%s", jogador.login);
+						}
+
+					} while (login == false);  //FIM VERIFICAÇÃO LOGIN EXISTENTE
+
 					printf("\n\tDigite sua senha: ");
 					scanf("%s", jogador.senha);
 					jogador.pontos = 0;
