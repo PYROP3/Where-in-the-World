@@ -13,16 +13,8 @@ struct adminType {
 	char keycripto[13];
 };
 
-struct tipoJogador {
-	char nome[30];
-	char login[30];
-	char senha[30];
-	int pontos;
-
-};
-
 enum loginType {
-	administrador = 1, jogado, sair
+	administrador = 1, jogador, sair
 };
 enum admOptions {
 	cadastroadm = 1, chglogin, cadastrocasos, removecasos
@@ -30,10 +22,6 @@ enum admOptions {
 enum chgLoginOptions {
 	chgn = 1, chgl, chgs, deladm, chgsair
 };
-enum playerOptions {
-	cadastroJogador = 1, loginjogador, alterarcadastro, jogar
-};
-
 
 void cripto(char* key, char* orig, char* cript);
 
@@ -41,28 +29,18 @@ int main() {
 	setlocale(LC_ALL, "Portuguese");
 	adminType adm, aux;
 	strcpy(adm.keycripto, "sleepycabin");
+	// char player[30];
 	enum loginType log;
 	admOptions casesadm;
 	chgLoginOptions caseschglogin;
-	playerOptions opcaojogador;
 	FILE *admin;
-	tipoJogador jogador, auxlogin;
-	char cadastro[100];
-	char string[30], resposta;
-	int i;
-	bool valido = true, login = true;
 
-	char ajuda = 'N';
-
+	printf("\n\tBem vindo ao jogo Where in the world!");
 	do {
-		system("cls");
-
-		printf("\n\tBem vindo ao jogo Where in the world!");
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
 
 		scanf("%i", &log);
-		if (log != sair)
-		{
+		if (log != sair) {
 			switch (log)
 			{
 			case administrador:
@@ -152,192 +130,12 @@ int main() {
 					break;
 				}
 				break;
-			case jogado:
-
+			case jogador:
 				system("cls");
-
-				printf("\n\tOpção escolhida: 2. Jogador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastrar novo jogador\n\t2. Login Jogador\n\t3. Alterar cadastro do Jogador\n\t4. Jogar\n\n\tOpcao desejada: ");
-				scanf("%i", &opcaojogador);
-
-				FILE*players = fopen("players.dat", "a+b");
+				FILE *p = fopen("players.txt", "a");
+				fclose(p);
 				system("cls");
-
-				switch (opcaojogador)
-				{
-				case cadastroJogador:
-
-					printf("\n\tOpção 1. Cadastro novo Jogador:\n\n\tDigite seu primeiro nome: ");
-					scanf("%s", jogador.nome);
-
-					printf("\n\tDigite seu login: ");
-					scanf("%s", jogador.login);
-
-					do  //INICIO VERIFICAÇÃO NOME EXISTENTE
-					{
-						rewind(players);
-
-						do
-						{
-
-							fread(&auxlogin, sizeof(auxlogin), 1, players);
-
-							if (strcmp(auxlogin.nome, jogador.nome) == 0)
-							{
-								login = false;
-								break;
-							}
-							else
-							{
-								login = true;
-							}
-
-						} while (!feof(players));
-
-						if (login == false)
-						{
-							system("cls");
-
-							printf("\n\tNome ja cadastrado!\n");
-							printf("\n\tTente digitar diferente: ");
-							scanf("%s", jogador.nome);
-						}
-
-					} while (login == false);  //FIM VERIFICAÇÃO NOME EXISTENTE
-
-					printf("\n\tDigite seu login: ");
-					scanf("%s", jogador.login);
-
-					do  //INICIO VERIFICAÇÃO LOGIN EXISTENTE
-					{
-						rewind(players);
-
-						do 
-						{
-
-							fread(&auxlogin, sizeof(auxlogin), 1, players);
-
-							if (strcmp(auxlogin.login, jogador.login) == 0)
-							{
-								login = false;
-								break;
-							}
-							else
-							{
-								login = true;
-							}
-
-						} while (!feof(players));
-
-						if (login == false)
-						{
-							system("cls");
-
-							printf("\n\tLogin ja cadastrado!\n");
-							printf("\n\tDigite outro login: ");
-							scanf("%s", jogador.login);
-						}
-
-					} while (login == false);  //FIM VERIFICAÇÃO LOGIN EXISTENTE
-
-					printf("\n\tDigite sua senha: ");
-					scanf("%s", jogador.senha);
-					jogador.pontos = 0;
-
-					fwrite(&jogador, sizeof(tipoJogador), 1, players);
-					Sleep(1000);
-
-					printf("\n\tCadastro realizado com sucesso! Aguarde um momento...");
-					Sleep(3000);
-					fclose(players);
-
-					break;
-
-				case loginjogador: //Login jogador
-
-					rewind(players);
-
-					system("cls");
-
-					valido = true;
-
-					do {
-
-						system("cls");
-
-						printf("\n\tOpção 2. Login Jogador:\n\n\tDigite seu login: ");
-						scanf("%s", &auxlogin.login);
-
-						do {
-							fread(&jogador, sizeof(jogador), 1, players); //Verifica se o login esta cadastrada
-
-							if (strcmp(jogador.login, auxlogin.login) == 0)
-							{
-								valido = true;
-								break;
-							}
-							else
-							{
-								valido = false;
-							}
-
-						} while (!feof(players));		// /\
-
-						if (valido == false)
-						{
-							rewind(players);
-							system("cls");
-							printf("\n\tLogin Invalido...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
-							getchar();
-							scanf("%c", &resposta);
-
-							ajuda = resposta;
-						}
-						else
-						{
-							break;
-						}
-
-					} while (valido == false && ajuda == 'S' || ajuda == 's');
-
-					//rewind(players);
-
-					if (valido == true)
-					{
-
-						do
-						{
-							system("cls");
-
-							printf("\n\tOla %s\n", jogador.nome);
-							printf("\n\tDigite sua senha: ");
-							scanf("%s", &auxlogin.senha);
-
-							if (strcmp(jogador.senha, auxlogin.senha) == 0)
-							{
-								system("cls");
-								printf("\n\tLogin efetuado com sucesso!");
-								printf("\n\n\tSeja bem vindo %s, Atualmente voce tem %i pontos", jogador.nome, jogador.pontos);
-								printf("\n\n\tVoltando para paginal inicial...");
-								Sleep(5000);
-								break;
-							}
-							else
-							{
-								rewind(players);
-
-								system("cls");
-								printf("\n\tSenha Invalida...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
-								getchar();
-								scanf("%c", &resposta);
-							}
-
-						} while (resposta != 'n' || resposta != 'N');
-					}
-					fclose(players);
-
-					break;
-				}
-
+				break;
 			}
 		}
 	} while (log != sair);
@@ -365,7 +163,7 @@ void cripto(char* key, char* orig, char* cript) {
 			if (cl == '\n')
 				cript[i] = '\0';
 			else
-				cript[i] = (char)((int)orig[i] + 1);
+				cript[i] = (char)((int) orig[i] + 1);
 		}
 	}
 }
