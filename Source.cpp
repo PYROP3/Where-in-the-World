@@ -51,7 +51,7 @@ int main() {
 	char string[30], resposta;
 	int i;
 	bool loginvalido = true;
-	char ajuda = 'N';
+	char ajuda = 'N', admhere=false;
 
 	printf("\n\tBem vindo ao jogo Where in the world!");
 	do {
@@ -69,38 +69,41 @@ int main() {
 				switch (casesadm) {
 				case cadastroadm:
 					system("cls");
-					if (fopen("logincripto.dat", "r+b") != NULL)
-					{
-						admin = fopen("logincripto.dat", "r+b");
-						if (fread(&aux, sizeof(adminType), 1, admin) == NULL)
+					do{
+						if (fopen("logincripto.dat", "r+b") != NULL)
 						{
-							fclose(admin);
-							admin = fopen("logincripto.dat", "w+b");
+							admin = fopen("logincripto.dat", "r+b");
+							if (fread(&aux, sizeof(adminType), 1, admin) == NULL)
+							{
+								fclose(admin);
+								admhere = true;
+							}
+							else
+							{
+								printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
+								Sleep(3000);
+							}
 						}
 						else
 						{
-							printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
-							Sleep(3000);
+							printf("\n\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
+							getchar();
+							fgets(adm.nome, 30, stdin);
+							printf("\n\tLogin: ");
+							fgets(adm.login, 30, stdin);
+							printf("\n\tSenha: ");
+							fgets(adm.senha, 30, stdin);
+							strcpy(aux.nome, adm.nome);
+							cripto(adm.keycripto, adm.login, aux.login);
+							cripto(adm.keycripto, adm.senha, aux.senha);
+							admin = fopen("logincripto.dat", "wb");
+							if (admin == NULL)
+								printf("Erro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
+							fwrite(&aux, sizeof(adminType), 1, admin);
+							fclose(admin);
+							admhere = 0;
 						}
-					}
-					else
-					{
-						printf("\n\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
-						getchar();
-						fgets(adm.nome, 30, stdin);
-						printf("\n\tLogin: ");
-						fgets(adm.login, 30, stdin);
-						printf("\n\tSenha: ");
-						fgets(adm.senha, 30, stdin);
-						strcpy(aux.nome,adm.nome);
-						cripto(adm.keycripto, adm.login, aux.login);
-						cripto(adm.keycripto, adm.senha, aux.senha);
-						admin = fopen("logincripto.dat", "wb");
-						if (admin == NULL)
-							printf("Erro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
-						fwrite(&aux, sizeof(adminType), 1, admin);
-						fclose(admin);
-					}
+					} while (admhere == 1);
 					system("cls");
 					break;
 				case chglogin:
