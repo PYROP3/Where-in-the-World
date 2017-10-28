@@ -50,11 +50,14 @@ int main() {
 	char cadastro[100];
 	char string[30], resposta;
 	int i;
-	bool loginvalido = true;
-	char ajuda = 'N', admhere=false;
+	bool valido = true, login = true;
 
-	printf("\n\tBem vindo ao jogo Where in the world!");
+	char ajuda = 'N';
+
 	do {
+		system("cls");
+
+		printf("\n\tBem vindo ao jogo Where in the world!");
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
 
 		scanf("%i", &log);
@@ -188,7 +191,6 @@ int main() {
 
 				FILE*players = fopen("players.dat", "a+b");
 				system("cls");
-				rewind(players);
 
 				switch (opcaojogador)
 				{
@@ -196,8 +198,77 @@ int main() {
 
 					printf("\n\tOpção 1. Cadastro novo Jogador:\n\n\tDigite seu primeiro nome: ");
 					scanf("%s", jogador.nome);
+
 					printf("\n\tDigite seu login: ");
 					scanf("%s", jogador.login);
+
+					do  //INICIO VERIFICAÇÃO NOME EXISTENTE
+					{
+						rewind(players);
+
+						do
+						{
+
+							fread(&auxlogin, sizeof(auxlogin), 1, players);
+
+							if (strcmp(auxlogin.nome, jogador.nome) == 0)
+							{
+								login = false;
+								break;
+							}
+							else
+							{
+								login = true;
+							}
+
+						} while (!feof(players));
+
+						if (login == false)
+						{
+							system("cls");
+
+							printf("\n\tNome ja cadastrado!\n");
+							printf("\n\tTente digitar diferente: ");
+							scanf("%s", jogador.nome);
+						}
+
+					} while (login == false);  //FIM VERIFICAÇÃO NOME EXISTENTE
+
+					printf("\n\tDigite seu login: ");
+					scanf("%s", jogador.login);
+
+					do  //INICIO VERIFICAÇÃO LOGIN EXISTENTE
+					{
+						rewind(players);
+
+						do 
+						{
+
+							fread(&auxlogin, sizeof(auxlogin), 1, players);
+
+							if (strcmp(auxlogin.login, jogador.login) == 0)
+							{
+								login = false;
+								break;
+							}
+							else
+							{
+								login = true;
+							}
+
+						} while (!feof(players));
+
+						if (login == false)
+						{
+							system("cls");
+
+							printf("\n\tLogin ja cadastrado!\n");
+							printf("\n\tDigite outro login: ");
+							scanf("%s", jogador.login);
+						}
+
+					} while (login == false);  //FIM VERIFICAÇÃO LOGIN EXISTENTE
+
 					printf("\n\tDigite sua senha: ");
 					scanf("%s", jogador.senha);
 					jogador.pontos = 0;
@@ -216,7 +287,8 @@ int main() {
 
 					system("cls");
 
-					loginvalido = true;
+					valido = true;
+
 
 					do {
 
@@ -230,17 +302,19 @@ int main() {
 
 							if (strcmp(jogador.login, auxlogin.login) == 0)
 							{
-								loginvalido = true;
+								valido = true;
 								break;
 							}
 							else
 							{
-								loginvalido = false;
+								valido = false;
 							}
 
-						} while (!feof(players));
-						if (loginvalido == false)
+						} while (!feof(players));		// /\
+
+						if (valido == false)
 						{
+							rewind(players);
 							system("cls");
 							printf("\n\tLogin Invalido...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
 							getchar();
@@ -248,36 +322,48 @@ int main() {
 
 							ajuda = resposta;
 						}
-		{
-			break;
-		}
+						else
+						{
+							break;
+						}
 
-					} while (loginvalido == false && ajuda == 'S' || ajuda == 's');
+					} while (valido == false && ajuda == 'S' || ajuda == 's');
 
-					rewind(players);
+					//rewind(players);
 
-					if (loginvalido == true)
+					if (valido == true)
 					{
-						printf("\n\tDigite sua senha: ");
-						scanf("%s", &auxlogin.senha);
 
-						do {
-							fread(&jogador, sizeof(jogador), 1, players);  //Verifica se a senha esta correta
+						do
+						{
+							system("cls");
+
+							printf("\n\tOla %s\n", jogador.nome);
+							printf("\n\tDigite sua senha: ");
+							scanf("%s", &auxlogin.senha);
 
 							if (strcmp(jogador.senha, auxlogin.senha) == 0)
 							{
 								system("cls");
 								printf("\n\tLogin efetuado com sucesso!");
 								printf("\n\n\tSeja bem vindo %s, Atualmente voce tem %i pontos", jogador.nome, jogador.pontos);
-								Sleep(3000);
+								printf("\n\n\tVoltando para paginal inicial...");
+								Sleep(5000);
+								break;
+							}
+							else
+							{
+								rewind(players);
+
+								system("cls");
+								printf("\n\tSenha Invalida...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
+								getchar();
+								scanf("%c", &resposta);
 							}
 
-						} while (feof(players));				//     UP
+						} while (resposta != 'n' || resposta != 'N');
 					}
-
-
-
-
+					fclose(players);
 
 					break;
 				}
