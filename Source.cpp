@@ -63,7 +63,6 @@ int main() {
 
 	do {
 		system("cls");
-		system("color F2");
 		printf("\n\tBem vindo ao jogo Where in the world!");
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
 
@@ -74,7 +73,6 @@ int main() {
 			{
 			case administrador:
 				system("cls");
-				system("color 04");
 				printf("\n\tOpção escolhida: 1. Administrador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\n\tOpcao desejada: ");
 				scanf("%i", &casesadm);
 				switch (casesadm) {
