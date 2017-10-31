@@ -13,7 +13,7 @@ struct adminType {
 	char keycripto[13];
 };
 
-struct tipoJogador{
+struct tipoJogador {
 	char nome[30];
 	char login[30];
 	char senha[30];
@@ -54,10 +54,10 @@ int main() {
 	playerOptions opcaojogador;
 	FILE *admin;
 
-  FILE *reserva;
+	FILE *reserva;
 	tipoJogador jogador, auxlogin, player;
 	char resposta;
-	bool valido = true, login = true, jaescreveu, condicao = false,  sairalteracaoadm=false;
+	bool valido = true, login = true, jaescreveu, condicao = false, sairalteracaoadm = false;
 
 	char ajuda = 'N';
 
@@ -120,7 +120,7 @@ int main() {
 					system("cls");
 					if (strcmp(cmp.login, aux.login) == 0 && strcmp(cmp.senha, aux.senha) == 0)
 					{
-						do{
+						do {
 							printf("\n\tLogin bem sucedido!\n\tSr(a) %s\tQuais das opções deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha\n\t4. Excluir credencial de administrador\n\t5. Sair\n\n\tOpcao desejada: ", aux.nome);
 							scanf("%i", &caseschglogin);
 							system("cls");
@@ -279,8 +279,10 @@ int main() {
 					fwrite(&jogador, sizeof(tipoJogador), 1, players);
 					Sleep(1000);
 
+					fclose(players);
+
 					printf("\n\tCadastro realizado com sucesso! Aguarde um momento...");
-					Sleep(3000);
+					Sleep(2000);
 
 					break;
 
@@ -568,7 +570,7 @@ int main() {
 
 								case alterarLogin: //----------------------------------------------------ALTERAR LOGIN
 
-									//reserva = fopen("reserva.dat", "a+b");
+												   //reserva = fopen("reserva.dat", "a+b");
 
 									system("cls");
 
@@ -663,7 +665,7 @@ int main() {
 									remove("reserva.dat");
 
 									break;
-								
+
 								case alterarSenha://------------------------------------------------------ALTERAR SENHA
 
 									system("cls");
@@ -814,7 +816,7 @@ int main() {
 
 								case sairAlterarCadastro:
 									condicao = true;
-										break;
+									break;
 									break;
 
 								default:
