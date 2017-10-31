@@ -18,7 +18,6 @@ struct tipoJogador {
 	char login[30];
 	char senha[30];
 	int pontos;
-
 };
 
 enum loginType {
@@ -439,7 +438,7 @@ int main() {
 								system("cls");
 								printf("\n\tLogin efetuado com sucesso!");
 								printf("\n\n\tPor favor aguarde um momento!");
-								Sleep(5000);
+								Sleep(3000);
 								valido = true;
 								break;
 							}
@@ -455,7 +454,7 @@ int main() {
 
 						} while (resposta != 'n' || resposta != 'N');
 
-						//---------------------------------------FIM VERIFICACAO SENHA------------------------------------------------------
+						//---------------------------------------FIM VERIFICACAO SENHA-------------(O cara ta em jogador)---------------
 
 						if (valido == true)
 						{
@@ -564,7 +563,7 @@ int main() {
 									fclose(reserva);
 									fclose(players);
 
-									remove("reserva.dat");
+									//remove("reserva.dat");
 
 									break;
 
