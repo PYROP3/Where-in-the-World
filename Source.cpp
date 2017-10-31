@@ -18,7 +18,6 @@ struct tipoJogador {
 	char login[30];
 	char senha[30];
 	int pontos;
-
 };
 
 enum loginType {
@@ -63,7 +62,6 @@ int main() {
 
 	do {
 		system("cls");
-		system("color F2");
 		printf("\n\tBem vindo ao jogo Where in the world!");
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
 
@@ -74,7 +72,6 @@ int main() {
 			{
 			case administrador:
 				system("cls");
-				system("color 04");
 				printf("\n\tOpção escolhida: 1. Administrador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\n\tOpcao desejada: ");
 				scanf("%i", &casesadm);
 				switch (casesadm) {
@@ -295,8 +292,10 @@ int main() {
 					fwrite(&jogador, sizeof(tipoJogador), 1, players);
 					Sleep(1000);
 
+					fclose(players);
+
 					printf("\n\tCadastro realizado com sucesso! Aguarde um momento...");
-					Sleep(3000);
+					Sleep(2000);
 
 					break;
 
@@ -453,7 +452,7 @@ int main() {
 								system("cls");
 								printf("\n\tLogin efetuado com sucesso!");
 								printf("\n\n\tPor favor aguarde um momento!");
-								Sleep(5000);
+								Sleep(3000);
 								valido = true;
 								break;
 							}
@@ -469,7 +468,7 @@ int main() {
 
 						} while (resposta != 'n' || resposta != 'N');
 
-						//---------------------------------------FIM VERIFICACAO SENHA------------------------------------------------------
+						//---------------------------------------FIM VERIFICACAO SENHA-------------(O cara ta em jogador)---------------
 
 						if (valido == true)
 						{
@@ -578,7 +577,7 @@ int main() {
 									fclose(reserva);
 									fclose(players);
 
-									remove("reserva.dat");
+									//remove("reserva.dat");
 
 									break;
 
