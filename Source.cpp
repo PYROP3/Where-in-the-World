@@ -15,6 +15,7 @@ struct adminType {#define _CRT_SECURE_NO_WARNINGS
 #include <Windows.h>
 
 struct adminType {
+	int patricia;
 	char nome[30];
 	char login[30];
 	char senha[30];
