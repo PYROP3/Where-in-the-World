@@ -78,13 +78,17 @@ int main() {
 				switch (casesadm) {
 				case cadastroadm:
 					system("cls");
-					if (fopen("logincripto.dat", "rb") != NULL)
+					admin = fopen("logincripto.dat", "rb");
+					//if (fopen("logincripto.dat", "rb") != NULL)
+					if (admin != NULL)
 					{
+						fclose(admin);
 						printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
 						Sleep(3000);
 					}
 					else
 					{
+						fclose(admin);
 						printf("\n\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
 						getchar();
 						fgets(adm.nome, 30, stdin);
@@ -96,9 +100,11 @@ int main() {
 						cripto(adm.keycripto, adm.login, aux.login);
 						cripto(adm.keycripto, adm.senha, aux.senha);
 						admin = fopen("logincripto.dat", "wb");
-						if (admin == NULL)
+						if (admin == NULL){
 							printf("Erro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
-						fwrite(&aux, sizeof(adminType), 1, admin);
+						} else {
+							fwrite(&aux, sizeof(adminType), 1, admin);
+						}
 						fclose(admin);
 					}
 					system("cls");
