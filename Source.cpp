@@ -24,7 +24,7 @@ enum loginType {
 	administrador = 1, jogado, sair
 };
 enum admOptions {
-	cadastroadm = 1, chglogin, cadastrocasos, removecasos
+	cadastroadm = 1, chglogin, cadastrocasos, removecasos, returnmenu
 };
 enum chgLoginOptions {
 	chgn = 1, chgl, chgs, deladm, chgsair
@@ -43,7 +43,7 @@ enum playerLogadoOptions {
 
 void cripto(char* key, char* orig, char* cript);
 
-int main() 
+int main()
 {
 	setlocale(LC_ALL, "Portuguese");
 
@@ -59,7 +59,7 @@ int main()
 	FILE *reserva;
 	tipoJogador jogador, auxlogin, player;
 	char resposta;
-	bool valido = true, login = true, jaescreveu, condicao = false, sairalteracaoadm = false, logou = false, logFora;
+	bool valido = true, login = true, jaescreveu, condicao = false, sairalteracaoadm = false, logou = false, logFora, returntomenu=false;
 	char ajuda = 'N';
 
 	do {
@@ -74,181 +74,183 @@ int main()
 			switch (log)
 			{
 			case administrador:
+				do {
 				system("cls");
 				system("color 04");
-				printf("\n\tOpção escolhida: 1. Administrador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\n\tOpcao desejada: ");
+				printf("\n\tOpção escolhida: 1. Administrador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Alterar dados do Administrador\n\t3. Cadastrar casos\n\t4. Remover casos\n\t5. Retornar ao menu anterior\n\n\tOpcao desejada: ");
 				scanf("%i", &casesadm);
-				switch (casesadm)
-				{
-				case cadastroadm:
-					system("cls");
-					admin = fopen("logincripto.dat", "rb");
-
-					if (admin != NULL)
+					switch (casesadm)
 					{
-						fclose(admin);
-						printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
-						Sleep(3000);
-					}
-					else
-					{
-						//fclose(admin);
-						printf("\n\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
-						getchar();
-						fgets(adm.nome, 30, stdin);
-						printf("\n\tLogin: ");
-						fgets(adm.login, 30, stdin);
-						printf("\n\tSenha: ");
-						fgets(adm.senha, 30, stdin);
-						strcpy(aux.nome, adm.nome);
-						cripto(adm.keycripto, adm.login, aux.login);
-						cripto(adm.keycripto, adm.senha, aux.senha);
-						admin = fopen("logincripto.dat", "wb");
-
-						if (admin == NULL)
-							printf("Erro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
-						else
-							fwrite(&aux, sizeof(adminType), 1, admin);
-
-						fclose(admin);
-					}
-					system("cls");
-					break;
-
-				case chglogin:
-					system("cls");
-					admin = fopen("logincripto.dat", "rb");
-
-					if (admin == NULL)
-					{
-						printf("\n\t É necessário o cadastro de administrador primeiro!");
-						Sleep(3000);
-						fclose(admin);
-					}
-					else
-					{
-						fclose(admin);
-						printf("\n\tOpção 2. Alterar dados do Administrador:\n\n\tDigite o login atual: ");
-						getchar();
-						fgets(adm.login, 30, stdin);
-						printf("\n\tSenha atual: ");
-						fgets(adm.senha, 30, stdin);
-						cripto(adm.keycripto, adm.login, cmp.login);
-						cripto(adm.keycripto, adm.senha, cmp.senha);
-						admin = fopen("logincripto.dat", "r+b");
-
-						if (admin == NULL)
-							printf("\n\tErro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
-						else
-							fread(&aux, sizeof(adminType), 1, admin);
-						
-						fclose(admin);
+					case cadastroadm:
 						system("cls");
-						
-						if (strcmp(cmp.login, aux.login) == 0 && strcmp(cmp.senha, aux.senha) == 0)
+						admin = fopen("logincripto.dat", "rb");
+
+						if (admin != NULL)
 						{
-							do {
-								printf("\n\tLogin bem sucedido!\n\tSr(a) %s\tQuais das opções deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha\n\t4. Excluir credencial de administrador\n\t5. Sair\n\n\tOpcao desejada: ", aux.nome);
-								scanf("%i", &caseschglogin);
-								system("cls");
-								admin = fopen("logincripto.dat", "w+b");
-
-								if (admin == NULL)
-									printf("\n\tErro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
-								else
-									fread(&aux, sizeof(adminType), 1, admin);
-
-								switch (caseschglogin)
-								{
-								case chgn:
-
-									printf("\n\tOpção 1.2.1. Alterar nome:\n\n\tDigite o novo nome: ");
-									getchar();
-									fgets(adm.nome, 30, stdin);
-									strcpy(aux.nome, adm.nome);
-									fwrite(&aux, sizeof(adminType), 1, admin);
-									fclose(admin);
-									break;
-
-								case chgl:
-
-									printf("\n\tOpção 1.2.2. Alterar login:\n\n\tDigite o novo login: ");
-									getchar();
-									fgets(adm.login, 30, stdin);
-									cripto(adm.keycripto, adm.login, aux.login);
-									fwrite(&aux, sizeof(adminType), 1, admin);
-									fclose(admin);
-									break;
-
-								case chgs:
-									
-									printf("\n\tOpção 1.2.3. Alterar senha:\n\n\tDigite a nova senha: ");
-									getchar();
-									fgets(adm.senha, 30, stdin);
-									cripto(adm.keycripto, adm.senha, aux.senha);
-									fwrite(&aux, sizeof(adminType), 1, admin);
-									fclose(admin);
-									break;
-
-								case deladm:
-									
-									printf("\n\tOpção 1.2.4. Excluir credencial de administrador:\n\tTem certeza desta opção?(S/N): ");
-									getchar();
-									scanf("%c", &resposta);
-
-									if (resposta == 'S' || resposta == 's')
-									{
-										fclose(admin);
-										printf("\n\tVocê será redirecionado para o menu principal em instantes...");
-										Sleep(2000);
-										sairalteracaoadm = true;
-										remove("logincripto.dat");
-										//system("del /f logincripto.dat");
-									}
-									else
-										fclose(admin);
-									break;
-
-								case chgsair:
-									
-									sairalteracaoadm = true;
-									break;
-								}
-
-								system("cls");
-
-							} while (sairalteracaoadm == false);
-
-							sairalteracaoadm = false;
-						}
-						else
-						{
-							printf("\n\tLogin ou senha incorretos! Voltando ao menu inicial...");
+							fclose(admin);
+							printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
 							Sleep(3000);
 						}
+						else
+						{
+							//fclose(admin);
+							printf("\n\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
+							getchar();
+							fgets(adm.nome, 30, stdin);
+							printf("\n\tLogin: ");
+							fgets(adm.login, 30, stdin);
+							printf("\n\tSenha: ");
+							fgets(adm.senha, 30, stdin);
+							strcpy(aux.nome, adm.nome);
+							cripto(adm.keycripto, adm.login, aux.login);
+							cripto(adm.keycripto, adm.senha, aux.senha);
+							admin = fopen("logincripto.dat", "wb");
+
+							if (admin == NULL)
+								printf("Erro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
+							else
+								fwrite(&aux, sizeof(adminType), 1, admin);
+
+							fclose(admin);
+						}
+						system("cls");
+						break;
+
+					case chglogin:
+						system("cls");
+						admin = fopen("logincripto.dat", "rb");
+						if (admin == NULL)
+						{
+							printf("\n\t É necessário o cadastro de administrador primeiro!");
+							Sleep(3000);
+						}
+						else
+						{
+							fclose(admin);
+							printf("\n\tOpção 2. Alterar dados do Administrador:\n\n\tDigite o login atual: ");
+							getchar();
+							fgets(adm.login, 30, stdin);
+							printf("\n\tSenha atual: ");
+							fgets(adm.senha, 30, stdin);
+							cripto(adm.keycripto, adm.login, cmp.login);
+							cripto(adm.keycripto, adm.senha, cmp.senha);
+							admin = fopen("logincripto.dat", "r+b");
+
+							if (admin == NULL)
+								printf("\n\tErro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
+							else
+								fread(&aux, sizeof(adminType), 1, admin);
+
+							fclose(admin);
+							system("cls");
+
+							if (strcmp(cmp.login, aux.login) == 0 && strcmp(cmp.senha, aux.senha) == 0)
+							{
+								do {
+									printf("\n\tLogin bem sucedido!\n\tSr(a) %s\tQuais das opções deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha\n\t4. Excluir credencial de administrador\n\t5. Sair\n\n\tOpcao desejada: ", aux.nome);
+									scanf("%i", &caseschglogin);
+									system("cls");
+									admin = fopen("logincripto.dat", "w+b");
+
+									if (admin == NULL)
+										printf("\n\tErro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
+									else
+										fread(&aux, sizeof(adminType), 1, admin);
+
+									switch (caseschglogin)
+									{
+									case chgn:
+
+										printf("\n\tOpção 1.2.1. Alterar nome:\n\n\tDigite o novo nome: ");
+										getchar();
+										fgets(adm.nome, 30, stdin);
+										strcpy(aux.nome, adm.nome);
+										fwrite(&aux, sizeof(adminType), 1, admin);
+										fclose(admin);
+										break;
+
+									case chgl:
+
+										printf("\n\tOpção 1.2.2. Alterar login:\n\n\tDigite o novo login: ");
+										getchar();
+										fgets(adm.login, 30, stdin);
+										cripto(adm.keycripto, adm.login, aux.login);
+										fwrite(&aux, sizeof(adminType), 1, admin);
+										fclose(admin);
+										break;
+
+									case chgs:
+
+										printf("\n\tOpção 1.2.3. Alterar senha:\n\n\tDigite a nova senha: ");
+										getchar();
+										fgets(adm.senha, 30, stdin);
+										cripto(adm.keycripto, adm.senha, aux.senha);
+										fwrite(&aux, sizeof(adminType), 1, admin);
+										fclose(admin);
+										break;
+
+									case deladm:
+
+										printf("\n\tOpção 1.2.4. Excluir credencial de administrador:\n\tTem certeza desta opção?(S/N): ");
+										getchar();
+										scanf("%c", &resposta);
+
+										if (resposta == 'S' || resposta == 's')
+										{
+											fclose(admin);
+											printf("\n\tVocê será redirecionado para o menu principal em instantes...");
+											Sleep(2000);
+											sairalteracaoadm = true;
+											remove("logincripto.dat");
+											//system("del /f logincripto.dat");
+										}
+										else
+											fclose(admin);
+										break;
+
+									case chgsair:
+
+										sairalteracaoadm = true;
+										break;
+									}
+
+									system("cls");
+
+								} while (sairalteracaoadm == false);
+
+								sairalteracaoadm = false;
+							}
+							else
+							{
+								printf("\n\tLogin ou senha incorretos! Voltando ao menu inicial...");
+								Sleep(3000);
+							}
+						}
+
+						system("cls");
+						break;
+
+					case cadastrocasos:
+						system("cls");
+						printf("\tOpção 3. Cadastrar casos:\n\n");
+						system("cls");
+						break;
+					case removecasos:
+						system("cls");
+						printf("\tOpção 4. Remover casos:\n\n");
+						system("cls");
+						break;
+					case returnmenu:returntomenu = true;
+						break;
 					}
-
-					system("cls");
-					break;
-
-				case cadastrocasos:
-					system("cls");
-					printf("\tOpção 3. Cadastrar casos:\n\n");
-					system("cls");
-					break;
-				case removecasos:
-					system("cls");
-					printf("\tOpção 4. Remover casos:\n\n");
-					system("cls");
-					break;
-				}
+				}while (returntomenu == false);
+				returntomenu = false;
 				break;
 
 			case jogado:
-
 				system("cls");
 
-				printf("\n\tOpção escolhida: 2. Jogador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastrar novo jogador\n\t2. Login Jogador\n\n\tOpcao desejada: ");
+				printf("\n\tOpção escolhida: 2. Jogador\n\tEscolha uma das opções abaixo:\n\n\t1. Cadastrar novo jogador\n\t2. Login Jogador\n\t3. Retornar ao menu anterior\n\n\tOpcao desejada: ");
 				scanf("%i", &opcaojogador);
 
 				FILE*players = fopen("players.dat", "a+b");
@@ -838,14 +840,14 @@ int main()
 						default:
 							break;
 						}
-					}while (logFora == false);
+					} while (logFora == false);
 				}
 				break;
-				}
 			}
+		}
 
-		} while (log != sair);
-	
+	} while (log != sair);
+
 	return 0;
 }
 
