@@ -170,6 +170,7 @@ int main()
 											printf("\n\tErro na abertura do arquivo de login do administrador. Contacte o desenvolvedor!");
 										else
 											fread(&aux, sizeof(adminType), 1, admin);
+											
 
 										switch (casesloginadm)
 										{
@@ -285,7 +286,8 @@ int main()
 											break;
 
 										case chgsair:
-
+											fwrite(&aux, sizeof(adminType), 1, admin);
+											fclose(admin);
 											sairalteracaoadm = true;
 											break;
 										}
@@ -298,7 +300,7 @@ int main()
 								}
 								else
 								{
-									printf("\n\tLogin ou senha incorretos! Voltando ao menu inicial...");
+									printf("\n\tLogin ou senha incorretos! Voltando ao menu anterior...");
 									Sleep(2000);
 								}
 							}
