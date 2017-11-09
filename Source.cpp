@@ -1003,15 +1003,14 @@ int main()
 
 	} while (log != sair);
 
-	oldPersona(personagem);
-
 	return 0;
 }
 
 void oldPersona(tipoPersonagem* personagens)
 {
 	FILE* fd = fopen("personagem.dat", "a + b");
-	int i = 0;
+	int i = 0, qtdPersonas = 0, minAjuda = 0;
+	char personaEscolhida[200];
 	tipoPersonagem aux[300], intermediaria;
 
 	system("cls");
@@ -1024,19 +1023,35 @@ void oldPersona(tipoPersonagem* personagens)
 	{
 		fread(&intermediaria, sizeof(tipoPersonagem), 1, fd);
 		printf("\t%i. %s, %i anos, %.2fm de altura, cabelo %s, gosta de %s\n", i + 1, intermediaria.nome, intermediaria.idade, intermediaria.altura, intermediaria.corCabelo, intermediaria.hobby);
+		qtdPersonas++;
 		
 		{
 			strcpy(aux[i].corCabelo, intermediaria.corCabelo);
 			strcpy(aux[i].hobby, intermediaria.hobby);
 			strcpy(aux[i].nome, intermediaria.nome);
 			aux[i].altura = intermediaria.altura;
-			aux[i].idade, intermediaria.idade;
+			aux[i].idade = intermediaria.idade;
 		}
 		
 		i++;
 	} while (!feof(fd));
-		printf("\t\nOpcoes: ");
-	Sleep(8000);
+		
+	printf("\t\nOpcoes (digite os numeros separados por virgula, MAX 100 personagens): ");
+	scanf("%s", personaEscolhida);
+	
+	for (i = 0; i < strlen(personaEscolhida); i++)
+	{
+		if (personaEscolhida[i] != ',')
+		{
+			minAjuda = personaEscolhida[i] - 49;
+
+			strcpy(personagens[i].corCabelo, aux[minAjuda].corCabelo);
+			strcpy(personagens[i].hobby, aux[minAjuda].hobby);
+			strcpy(personagens[i].nome, aux[minAjuda].nome);
+			personagens[i].altura = aux[minAjuda].altura;
+			personagens[i].idade = aux[minAjuda].idade;
+		}
+	}
 
 	fclose(fd);
 
