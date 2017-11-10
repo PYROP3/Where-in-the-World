@@ -63,7 +63,7 @@ enum personas {
 
 void cripto(char* key, char* orig, char* cript);
 void newPersona();
-void oldPersona(tipoPersonagem* personagem);
+int oldPersona(tipoPersonagem* personagem);
 
 int main()
 {
@@ -86,8 +86,9 @@ int main()
 	FILE *personagens;
 	tipoJogador jogador, auxlogin, player;
 	char resposta;
-	int quantidade = 0, i;
-	bool valido = true, login = true, jaescreveu, condicao = false, sairalteracaoadm = false, logou = false, logFora, returntomenu = false;
+	int quantidade = 0, i, qtdPersonas;
+	bool valido = true, login = true, jaescreveu, condicao = false;
+	bool sairalteracaoadm = false, logou = false, logFora, returntomenu = false;
 	char ajuda = 'N';
 
 	do {
@@ -310,19 +311,26 @@ int main()
 											case cadastrarPersonagem:
 
 												newPersona(); //=================AQUIIII BURROOOOO
-												oldPersona(personagem);
+												qtdPersonas = oldPersona(personagem);
 
 												break;
 											case usarCadastrado:
-												
-												oldPersona(personagem);
+
+												qtdPersonas = oldPersona(personagem);
 
 												break;
 											default:
 												break;
 											}
 
+											for (i = 0; i < qtdPersonas; i++)
+											{
+												strcpy(caso.personagens[i], personagem[i].nome);
+											}
+
 											Sleep(1000);
+
+											fwrite(&caso, sizeof(tipoCaso), 1, casos);
 
 											fclose(casos);
 
@@ -1003,28 +1011,35 @@ int main()
 
 	} while (log != sair);
 
+	newPersona();
+	qtdPersonas = oldPersona(personagem);
+
 	return 0;
 }
 
-void oldPersona(tipoPersonagem* personagens)
+int oldPersona(tipoPersonagem* personagens)
 {
 	FILE* fd = fopen("personagem.dat", "a + b");
-	int i = 0, qtdPersonas = 0, minAjuda = 0;
+	int i = 0, qtdPersonas = 0, minAjuda = 0, j = 0;
 	char personaEscolhida[200];
 	tipoPersonagem aux[300], intermediaria;
 
 	system("cls");
 
 	printf("\n\tEscolha o personagem que deseja colocar em seu caso\n\n");
-	
+
 	rewind(fd);
 
 	do
 	{
 		fread(&intermediaria, sizeof(tipoPersonagem), 1, fd);
-		printf("\t%i. %s, %i anos, %.2fm de altura, cabelo %s, gosta de %s\n", i + 1, intermediaria.nome, intermediaria.idade, intermediaria.altura, intermediaria.corCabelo, intermediaria.hobby);
-		qtdPersonas++;
 		
+		if (!feof(fd))
+		{
+			printf("\t%i. %s, %i anos, %.2fm de altura, cabelo %s, gosta de %s\n", i + 1, intermediaria.nome, intermediaria.idade, intermediaria.altura, intermediaria.corCabelo, intermediaria.hobby);
+			qtdPersonas++;
+		}
+
 		{
 			strcpy(aux[i].corCabelo, intermediaria.corCabelo);
 			strcpy(aux[i].hobby, intermediaria.hobby);
@@ -1032,29 +1047,32 @@ void oldPersona(tipoPersonagem* personagens)
 			aux[i].altura = intermediaria.altura;
 			aux[i].idade = intermediaria.idade;
 		}
-		
+
 		i++;
 	} while (!feof(fd));
-		
-	printf("\t\nOpcoes (digite os numeros separados por virgula, MAX 100 personagens): ");
+
+	printf("\n\tOpções (digite os números separados por vírgula, MAX 100 personagens): ");
 	scanf("%s", personaEscolhida);
-	
+
 	for (i = 0; i < strlen(personaEscolhida); i++)
 	{
 		if (personaEscolhida[i] != ',')
 		{
 			minAjuda = personaEscolhida[i] - 49;
 
-			strcpy(personagens[i].corCabelo, aux[minAjuda].corCabelo);
-			strcpy(personagens[i].hobby, aux[minAjuda].hobby);
-			strcpy(personagens[i].nome, aux[minAjuda].nome);
-			personagens[i].altura = aux[minAjuda].altura;
-			personagens[i].idade = aux[minAjuda].idade;
+			strcpy(personagens[j].corCabelo, aux[minAjuda].corCabelo);
+			strcpy(personagens[j].hobby, aux[minAjuda].hobby);
+			strcpy(personagens[j].nome, aux[minAjuda].nome);
+			personagens[j].altura = aux[minAjuda].altura;
+			personagens[j].idade = aux[minAjuda].idade;
+
+			j++;
 		}
 	}
 
-	fclose(fd);
+	return qtdPersonas;
 
+	fclose(fd);
 }
 
 void newPersona()
@@ -1095,17 +1113,17 @@ void newPersona()
 
 		printf("\tDigite a idade do %s: ", aux.nome);
 		scanf("%i", &aux.idade);
-		
+
 		fflush(stdin);
 		printf("\tDigite a altura do(a) %s (use virgula): ", aux.nome);
 		scanf("%f", &aux.altura);
-		
+
 		getchar();
 		printf("\tDigite a cor do cabelo do(a) %s: ", aux.nome);
 		fflush(stdin);
 		fgets(aux.corCabelo, 20, stdin);
-		
-		
+
+
 		printf("\tDigite um hobby do(a) %s: ", aux.nome);
 		fflush(stdin);
 		fgets(aux.hobby, 50, stdin);
@@ -1122,8 +1140,7 @@ void newPersona()
 				aux.hobby[i] = '\0';
 		}
 
-
-
+		
 		fwrite(&aux, sizeof(tipoPersonagem), 1, fd);
 
 		if (resposta == 'n' || resposta == 'N')
