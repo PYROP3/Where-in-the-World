@@ -15,10 +15,10 @@ struct tipoPersonagem {
 };
 
 struct tipoCaso {
+	tipoPersonagem personagens[30];
 	char historiaGeral[999];
 	char historiaCidade[30][999];
 	char cidades[30][50];
-	char personagens[30][50];
 	char dicas[100][999];
 };
 
@@ -96,8 +96,8 @@ int main()
 		system("color F2");
 		printf("\n\tBem vindo ao jogo Where in the world!");
 		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
-
 		scanf("%i", &log);
+
 		if (log != sair)
 		{
 			switch (log)
@@ -120,7 +120,7 @@ int main()
 							{
 								fclose(admin);
 								printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
-								Sleep(3000);
+								//Sleep(3000);
 							}
 							else
 							{
@@ -156,7 +156,7 @@ int main()
 							if (admin == NULL)
 							{
 								printf("\n\t É necessário o cadastro de administrador primeiro!");
-								Sleep(3000);
+								//Sleep(3000);
 							}
 							else
 							{
@@ -236,10 +236,12 @@ int main()
 											system("cls");
 											printf("\n\tOpção 1.2.4. Cadastrar casos:");
 											printf("\n\n\tPrimeiro digite a história do caso: (MAX 999 caracteres): ");
+											fflush(stdin);
 											getchar();
 											fgets(caso.historiaGeral, 999, stdin);
+			
 											printf("\n\tHistória cadastrada com sucesso! Agurdade um momento....");
-											Sleep(2000);
+											//Sleep(2000);
 
 											quantidade = 1;
 
@@ -264,9 +266,7 @@ int main()
 														printf("\n\tAguarde enquanto lhe redirecionamos ao proximo passo...");
 													}
 
-													Sleep(3000);
-
-													fclose(casos);
+													//Sleep(3000);
 
 													break;
 												}
@@ -292,40 +292,45 @@ int main()
 												printf("\n\tCadastre agora a descrição / historia de cada cidade: (MAX 999 Caracteres)");
 												printf("\n\n\tHistoria da cidade %s: ", caso.cidades[i]);
 												fflush(stdin);
+												getchar();
 												fgets(caso.historiaCidade[i], 999, stdin);
 											}
 
 											system("cls");
 
-											printf("\n\tCidades concluidas com sucesso!");
-											printf("\n\n\tDigite a opção desejada: \n");
-											printf("\n\t1.Cadatrar novos personagens");
-											printf("\n\t2.Usar personagens ja cadastrados");
-											printf("\n\n\tOpcao: ");
-											scanf("%i", &matsf);
+												printf("\n\tCidades concluidas com sucesso!");
+												printf("\n\n\tDigite a opção desejada: \n");
+												printf("\n\t1.Cadatrar novos personagens");
+												printf("\n\t2.Usar personagens ja cadastrados");
+												printf("\n\n\tOpcao: ");
+												scanf("%i", &matsf);
+
+												switch (matsf)
+												{
+												case cadastrarPersonagem:
+
+													newPersona(); //=================AQUIIII BURROOOOO
+													qtdPersonas = oldPersona(personagem);
+
+													break;
+												case usarCadastrado:
+
+													qtdPersonas = oldPersona(personagem);
+
+													break;
+												default:
+													break;
+												}
 
 											system("cls");
 
-											switch (matsf)
-											{
-											case cadastrarPersonagem:
-
-												newPersona(); //=================AQUIIII BURROOOOO
-												qtdPersonas = oldPersona(personagem);
-
-												break;
-											case usarCadastrado:
-
-												qtdPersonas = oldPersona(personagem);
-
-												break;
-											default:
-												break;
-											}
-
 											for (i = 0; i < qtdPersonas; i++)
 											{
-												strcpy(caso.personagens[i], personagem[i].nome);
+												strcpy(caso.personagens[i].nome, personagem[i].nome);
+												strcpy(caso.personagens[i].hobby, personagem[i].hobby);
+												caso.personagens[i].altura = personagem[i].altura;
+												caso.personagens[i].idade = personagem[i].idade;
+												strcpy(caso.personagens[i].corCabelo, personagem[i].corCabelo);
 											}
 
 											Sleep(1000);
@@ -366,7 +371,7 @@ int main()
 											{
 												fclose(admin);
 												printf("\n\tVocê será redirecionado para o menu administrativo em instantes...");
-												Sleep(2000);
+												//Sleep(2000);
 												sairalteracaoadm = true;
 												remove("logincripto.dat");
 											}
@@ -390,7 +395,7 @@ int main()
 								else
 								{
 									printf("\n\tLogin ou senha incorretos! Voltando ao menu inicial...");
-									Sleep(2000);
+									//Sleep(2000);
 								}
 							}
 
@@ -404,7 +409,7 @@ int main()
 					else
 					{
 						printf("\n\n\tOpção inválida! Tente novamente em instantes...");
-						Sleep(3000);
+						//Sleep(3000);
 					}
 				} while (returntomenu == false);
 				returntomenu = false;
@@ -498,13 +503,13 @@ int main()
 					jogador.pontos = 0;
 
 					fwrite(&jogador, sizeof(tipoJogador), 1, players);
-					Sleep(1000);
+					//Sleep(1000);
 
 					fclose(players);
 
 					printf("\n\tCadastro realizado com sucesso! Aguarde um momento...");
 					logou = true;
-					Sleep(2000);
+					//Sleep(2000);
 
 					break; //-------------------------------------------------------------------FIM LOGIN CADASTRO JOGADOR
 
@@ -575,7 +580,7 @@ int main()
 								printf("\n\tLogin efetuado com sucesso!");
 								printf("\n\n\tSeja bem vindo %s, Atualmente voce tem %i pontos", jogador.nome, jogador.pontos);
 								printf("\n\n\tCarregando pagina jogador...");
-								Sleep(5000);
+								//Sleep(5000);
 								logou = true;
 								break;
 							}
@@ -1011,9 +1016,18 @@ int main()
 
 	} while (log != sair);
 
-	newPersona();
-	qtdPersonas = oldPersona(personagem);
+	//newPersona();
+	//oldPersona(personagem);
+	/*casos = fopen("casos.dat", "a + b");
 
+	fread(&caso, sizeof(caso), 1, casos);
+
+	printf("%s\n", caso.personagens[0].nome);
+	printf("%s\n", caso.personagens[1].nome);
+	printf("%s\n", caso.personagens[2].nome);
+
+	fclose(casos);
+	*/
 	return 0;
 }
 
@@ -1032,20 +1046,20 @@ int oldPersona(tipoPersonagem* personagens)
 
 	do
 	{
-		fread(&intermediaria, sizeof(tipoPersonagem), 1, fd);
-		
+		fread(&intermediaria, sizeof(intermediaria), 1, fd);
+
 		if (!feof(fd))
 		{
 			printf("\t%i. %s, %i anos, %.2fm de altura, cabelo %s, gosta de %s\n", i + 1, intermediaria.nome, intermediaria.idade, intermediaria.altura, intermediaria.corCabelo, intermediaria.hobby);
 			qtdPersonas++;
-		}
 
-		{
-			strcpy(aux[i].corCabelo, intermediaria.corCabelo);
-			strcpy(aux[i].hobby, intermediaria.hobby);
-			strcpy(aux[i].nome, intermediaria.nome);
-			aux[i].altura = intermediaria.altura;
-			aux[i].idade = intermediaria.idade;
+			{
+				strcpy(aux[i].corCabelo, intermediaria.corCabelo);
+				strcpy(aux[i].hobby, intermediaria.hobby);
+				strcpy(aux[i].nome, intermediaria.nome);
+				aux[i].altura = intermediaria.altura;
+				aux[i].idade = intermediaria.idade;
+			}
 		}
 
 		i++;
@@ -1070,9 +1084,9 @@ int oldPersona(tipoPersonagem* personagens)
 		}
 	}
 
-	return qtdPersonas;
-
 	fclose(fd);
+
+	return qtdPersonas;
 }
 
 void newPersona()
@@ -1140,7 +1154,7 @@ void newPersona()
 				aux.hobby[i] = '\0';
 		}
 
-		
+
 		fwrite(&aux, sizeof(tipoPersonagem), 1, fd);
 
 		if (resposta == 'n' || resposta == 'N')
