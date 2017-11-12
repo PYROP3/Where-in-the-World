@@ -28,6 +28,7 @@ struct tipoCaso {
 	char historiaCidade[30][999];
 	char cidades[30][50];
 	char pistas[100][999];
+	int numeroCidades;
 };
 
 struct adminType {
@@ -291,6 +292,8 @@ int main()
 													{
 														printf("\n\tAguarde enquanto lhe redirecionamos ao proximo passo...");
 													}
+
+													caso.numeroCidades = quantidade - 1;
 
 													Sleep(2000);
 
@@ -1070,12 +1073,12 @@ int main()
 									while (stayinoption) {
 										system("cls");
 										printf("\tPara qual cidade você quer ir? (ou digite 31 para VOLTAR)\n\n");
-										for (int i = 0; i < 29; i++)
+										for (int i = 0; i < casoatual.numeroCidades; i++)
 											printf("\t\t%i - %s\n", i + 1, casoatual.cidades[i]);
 										break;
 										printf("\n\tSua opção: ");
 										scanf("%i", &opcaoemopcao);
-										if (opcaoemopcao > 0 && opcaoemopcao < 31) {
+										if (opcaoemopcao > 0 && opcaoemopcao < casoatual.numeroCidades + 1) {
 											printf("\n\n\t\tIndo para %s...", casoatual.cidades[opcaoemopcao - 1]);
 											temporestante -= 100;
 											stayinoption = false;
