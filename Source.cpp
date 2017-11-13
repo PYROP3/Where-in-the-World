@@ -11,7 +11,7 @@ struct checkPerson {
 	char sexo[2][10] = { "Masculino", "Feminino" };
 	char corCabelo[6][10] = { "Preto", "Castanho", "Loiro", "Vermelho", "Azul", "Branco" };
 	char hobby[5][25] = { "Caminhar", "Jogar", "Tocar instrumento(s)", "Ler", "Discutir" };
-	char feature[7][10] = {"Chapéu", "Boné", "Tatuagem", "Óculos", "Pulseira", "Anel", "Colar"};
+	char feature[7][10] = { "Chapéu", "Boné", "Tatuagem", "Óculos", "Pulseira", "Anel", "Colar" };
 };
 
 struct tipoPersonagem {
@@ -28,6 +28,7 @@ struct tipoCaso {
 	char historiaCidade[30][999];
 	char cidades[30][50];
 	char pistas[100][999];
+	int numeroCidades;
 };
 
 struct adminType {
@@ -70,7 +71,7 @@ enum personas {
 };
 
 enum QualCaracteristica {
-	sexo, corDeCabelo, Hobby, Feature 
+	sexo, corDeCabelo, Hobby, Feature
 };
 
 void cripto(char* key, char* orig, char* cript);
@@ -104,6 +105,19 @@ int main()
 	bool sairalteracaoadm = false, logou = false, logFora, returntomenu = false;
 	char ajuda = 'N';
 
+	//VARS DO JOGO
+	tipoCaso casoatual;
+	FILE *casoatualDesc;
+	int casoparaloadar = 1;
+	bool gameover = false;
+	int temporestante = 1500;
+	int cidadeatual = 0;
+	int opcaoemopcao;
+	int opcaoemjogo;
+	bool stayinoption = true;
+	bool temMandato = false;
+	tipoPersonagem retratofalado;
+
 	do {
 		system("cls");
 		system("color F2");
@@ -133,11 +147,11 @@ int main()
 							{
 								fclose(admin);
 								printf("\n\tAdministrador já cadastrado! Desculpe\n\tRetornando ao menu...");
-								//Sleep(3000);
+								Sleep(3000);
 							}
 							else
 							{
-								//fclose(admin);
+								fclose(admin);
 
 								printf("\n\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
 								getchar();
@@ -249,7 +263,6 @@ int main()
 											system("cls");
 											printf("\n\tOpção 1.2.4. Cadastrar casos:");
 											printf("\n\n\tPrimeiro digite a história do caso (MAX 999 caracteres): ");
-											fflush(stdin);
 											getchar();
 											fgets(caso.historiaGeral, 999, stdin);
 
@@ -264,7 +277,6 @@ int main()
 												printf("\n\tAgora digite as cidades que farão parte do caso (MAX 30 cidades e 50 caracteres):");
 												printf("\n\tPara encerrar o cadastro digite 'Sair' (Sem as aspas)");
 												printf("\n\n\tDigite o nome da cidade %i: ", quantidade);
-												fflush(stdin);
 												fgets(cleberson, 50, stdin); //30 cidades 50 caracteres
 
 												if (strcmp(cleberson, "Sair") == 0 || strcmp(cleberson, "sair") == 0 || strcmp(cleberson, "sair\n") == 0 || strcmp(cleberson, "Sair\n") == 0 && quantidade < 32)
@@ -305,16 +317,16 @@ int main()
 												printf("\n\tCadastre agora a descrição / história de cada cidade (MAX 999 Caracteres):");
 												printf("\n\n\tHistoria da cidade %s: ", caso.cidades[i]);
 												fflush(stdin);
-												getchar();
+												//getchar();
 												fgets(caso.historiaCidade[i], 999, stdin);
 											}
 
 											system("cls");
 
-											printf("\n\tCidades concluidas com sucesso!");
+											printf("\n\tCidades concluídas com sucesso!");
 											printf("\n\n\tDigite a opção desejada: \n");
-											printf("\n\t1.Cadatrar novos personagens");
-											printf("\n\t2.Usar personagens ja cadastrados");
+											printf("\n\t1.Cadastrar novos personagens");
+											printf("\n\t2.Usar personagens já cadastrados");
 											printf("\n\n\tOpção: ");
 											scanf("%i", &matsf);
 
@@ -340,9 +352,9 @@ int main()
 											for (i = 0; i < qtdPersonas; i++)
 											{
 												strcpy(caso.personagens[i].nome, personagem[i].nome);
-												caso.personagens[i].sexo, personagem[i].sexo;
-												caso.personagens[i].corCabelo, personagem[i].corCabelo;
-												caso.personagens[i].hobby, personagem[i].hobby;
+												caso.personagens[i].sexo = personagem[i].sexo;
+												caso.personagens[i].corCabelo = personagem[i].corCabelo;
+												caso.personagens[i].hobby = personagem[i].hobby;
 												caso.personagens[i].feature = personagem[i].feature;
 											}
 
@@ -583,7 +595,7 @@ int main()
 						{
 							system("cls");
 
-							printf("\n\tOla %s\n", jogador.nome);
+							printf("\n\tOlá %s\n", jogador.nome);
 							printf("\n\tDigite sua senha: ");
 							scanf("%s", &auxlogin.senha);
 
@@ -591,9 +603,9 @@ int main()
 							{
 								system("cls");
 								printf("\n\tLogin efetuado com sucesso!");
-								printf("\n\n\tSeja bem vindo %s, Atualmente voce tem %i pontos", jogador.nome, jogador.pontos);
-								printf("\n\n\tCarregando pagina jogador...");
-								//Sleep(5000);
+								printf("\n\n\tSeja bem vindo %s, Atualmente você têm %i pontos", jogador.nome, jogador.pontos);
+								printf("\n\n\tCarregando página jogador...");
+								Sleep(2000);
 								logou = true;
 								break;
 							}
@@ -918,7 +930,7 @@ int main()
 
 										printf("\n\tTem certeza que deseja excluir a conta?");
 										printf("\n\n\t1. Sim");
-										printf("\n\t2. Nao\n\n\tOpcao: ");
+										printf("\n\t2. Não\n\n\tOpção: ");
 										scanf("%i", &change);
 
 										if (change == 2)
@@ -982,9 +994,9 @@ int main()
 												{
 													system("cls");
 
-													printf("\n\tSenha invalida, deseja digitar novamente?");
+													printf("\n\tSenha inválida, deseja digitar novamente?");
 													printf("\n\n\t1. Sim");
-													printf("\n\t2. Nao\n\n\tOpcao: ");
+													printf("\n\t2. Não\n\n\tOpção: ");
 													scanf("%i", &change);
 
 													if (change == 2)
@@ -1014,6 +1026,106 @@ int main()
 
 							break;
 						case jogar:
+							retratofalado.sexo = 1;
+							retratofalado.corCabelo = 1;
+							retratofalado.hobby = 1;
+							retratofalado.feature = 1;
+							//loadar o caso
+
+							//casoparaloadar = 1;
+							casoatualDesc = fopen("casos.dat", "r + b");
+							//fseek(casoatualDesc, casoparaloadar * sizeof(tipoCaso), 0);//Achar o caso específico para carregar
+							fread(&casoatual, sizeof(tipoCaso), 1, casoatualDesc);
+							system("cls");
+							while (!gameover && temporestante > 0) {
+								printf("\t\tCaso número %i\n", casoparaloadar);
+								printf("\t\t%s\n", casoatual.historiaGeral);
+								printf("\t\tVocê está em %s\n\n", casoatual.cidades[0]);
+								printf("\t\tO que deseja fazer?\n\n");
+								printf("\t\t1 - Procurar pistas pela cidade\n");
+								printf("\t\t2 - Viajar para outra cidade\n");
+								printf("\t\t3 - Atualizar o retrato falado\n\n");
+								printf("\tSua opção: ");
+								scanf("%i", &opcaoemjogo);
+								switch (opcaoemjogo) { //mudar para enum depois
+								case 1://Procurar pistas pela cidade
+									stayinoption = true;
+									while (stayinoption) {
+										system("cls");
+										printf("\t\tQual pista você deseja obter? (Pista 1, 2 ou 3, ou digite 4 para VOLTAR)\n");
+										printf("\tSua opção: ");
+										scanf("%i", &opcaoemopcao);
+										if (opcaoemopcao > 0 && opcaoemopcao < 4) {
+											printf("\tSua pista:\n");
+											printf("\t\t%s\n", casoatual.pistas[cidadeatual * 3 + opcaoemopcao - 1]);
+											temporestante -= 50;
+										}
+										else if (opcaoemopcao == 4) stayinoption = false;
+										else printf("\n\t\tPista inválida\n");
+									}
+									break;
+								case 2://Viajar para outra cidade (PRECISA CHECAR SE O VILAO ESTÁ AQUI)
+									stayinoption = true;
+									while (stayinoption) {
+										system("cls");
+										printf("\tPara qual cidade você quer ir? (ou digite 31 para VOLTAR)\n\n");
+										for (int i = 0; i < casoatual.numeroCidades; i++)
+											printf("\t\t%i - %s\n", i + 1, casoatual.cidades[i]);
+										break;
+										printf("\n\tSua opção: ");
+										scanf("%i", &opcaoemopcao);
+										if (opcaoemopcao > 0 && opcaoemopcao < 31) {
+											printf("\n\n\t\tIndo para %s...", casoatual.cidades[opcaoemopcao - 1]);
+											temporestante -= 100;
+											stayinoption = false;
+										}
+										else if (opcaoemopcao == 31) stayinoption = false;
+										else printf("\n\tCidade inválida\n");
+									}
+									break;
+								case 3://Retrato falado
+									stayinoption = true;
+
+									while (stayinoption) {
+										system("cls");
+										printf("\n\tO seu retrato falado atualmente é: ");
+										checkPerson tempcheck;
+
+										printf("\t\tSexo:             %s\n", tempcheck.sexo[retratofalado.sexo - 1]);
+										printf("\t\tCor do cabelo:    %s\n", tempcheck.corCabelo[retratofalado.corCabelo - 1]);
+										printf("\t\tHobby:            %s\n", tempcheck.hobby[retratofalado.hobby - 1]);
+										printf("\t\tSímbolo marcante: %s\n", tempcheck.feature[retratofalado.feature - 1]);
+
+										printf("\n\n\t\tQual característica você deseja atualizar?\n");
+										printf("\t\t1 - Gênero\n");
+										printf("\t\t2 - Cor do cabelo\n");
+										printf("\t\t3 - Hobby\n");
+										printf("\t\t4 - Símbolo marcante\n");
+										printf("\t\t5 - VOLTAR\n");
+
+										QualCaracteristica car;
+										scanf("%i", &car);
+										int newval = checkCarac(car);
+										switch (car) {
+										case sexo: retratofalado.sexo = newval; break;
+										case corDeCabelo: retratofalado.corCabelo = newval; break;
+										case Hobby: retratofalado.hobby = newval; break;
+										case Feature: retratofalado.feature = newval; break;
+										case 5: stayinoption = false; break;
+										default: printf("\n\tCaracterística inválida\n"); break;
+										}
+
+										if (stayinoption) {//Checar se o retrato falado está correto
+
+										}
+									}
+									break;
+								default: printf("Opção não reconhecida, tente novamente...");
+									Sleep(2000);
+									break;
+								}
+							}
+
 							break;
 						case logOut:
 							logFora = true;
@@ -1064,7 +1176,7 @@ int oldPersona(tipoPersonagem* personagens)
 
 		if (!feof(fd))
 		{
-			printf("\t%i. %s do sexo %s, cabelo %s,", i + 1, intermediaria.nome, checarCaract.sexo[intermediaria.sexo-1], checarCaract.corCabelo[intermediaria.corCabelo-1]);
+			printf("\t%i. %s do sexo %s, cabelo %s,", i + 1, intermediaria.nome, checarCaract.sexo[intermediaria.sexo - 1], checarCaract.corCabelo[intermediaria.corCabelo - 1]);
 			printf(" gosta de %s e seu símbolo marcante é %s \n", checarCaract.hobby[intermediaria.hobby - 1], checarCaract.feature[intermediaria.feature - 1]);
 			qtdPersonas++;
 
@@ -1085,12 +1197,12 @@ int oldPersona(tipoPersonagem* personagens)
 
 	for (i = 0; i < strlen(personaEscolhida); i++)
 	{
-		if (personaEscolhida[i] != ',')
+		if (personaEscolhida[i] != ',' )
 		{
 			minAjuda = personaEscolhida[i] - 49;
-			if (personaEscolhida[i + 1] != ',')
+			if (personaEscolhida[i + 1] != ',' && personaEscolhida[i + 1] != '\0')
 			{
-				minAjuda = (minAjuda*10) + (personaEscolhida[i+1] - 49);
+				minAjuda = (minAjuda * 10) + (personaEscolhida[i + 1] - 49);
 				if (personaEscolhida[i + 2] != ',')
 					minAjuda = (minAjuda * 10) + (personaEscolhida[i + 2] - 49);
 			}
@@ -1106,7 +1218,7 @@ int oldPersona(tipoPersonagem* personagens)
 
 	fclose(fd);
 
-	return qtdPersonas;
+	return j;
 }
 
 void newPersona()
@@ -1121,8 +1233,8 @@ void newPersona()
 		system("cls");
 		printf("\n\tCadastro de personagens\n");
 		printf("\n\tDigite o nome do seu novo personagem: ");
-		fflush(stdin);
-		fgets(aux.nome , 50, stdin);
+		getchar();
+		fgets(aux.nome, 50, stdin);
 
 		rewind(fd);
 
@@ -1138,7 +1250,7 @@ void newPersona()
 					printf("\n\tNome ja cadastrado!");
 					printf("\n\n\tTente um nome diferente: ");
 					fflush(stdin);
-					fgets(aux.nome , 50, stdin);
+					fgets(aux.nome, 50, stdin);
 
 				} while (strcmp(ajudadora.nome, aux.nome) == 0);
 			}
@@ -1162,6 +1274,7 @@ void newPersona()
 		aux.feature = checkCarac(Feature);
 		system("cls");
 
+		getchar();
 		printf("\n\tDeseja cadastrar mais personagens (S/N): ");
 		scanf("%c", &resposta);
 
@@ -1218,7 +1331,7 @@ int checkCarac(QualCaracteristica caracteristica) {
 				Sleep(1500);
 				system("cls");
 			}
-		}while (escolha < 1 || escolha > 5);
+		} while (escolha < 1 || escolha > 5);
 		return escolha;
 	case Feature:
 		do {
