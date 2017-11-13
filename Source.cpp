@@ -8,10 +8,10 @@
 
 struct checkPerson {
 	char nome[50];
-	char sexo[2][10] = { "Masculino", "Feminino" };
-	char corCabelo[6][10] = { "Preto", "Castanho", "Loiro", "Vermelho", "Azul", "Branco" };
-	char hobby[5][25] = { "Caminhar", "Jogar", "Tocar instrumento(s)", "Ler", "Discutir" };
-	char feature[7][10] = { "Chapéu", "Boné", "Tatuagem", "Óculos", "Pulseira", "Anel", "Colar" };
+	char sexo[2][10] = {"Masculino", "Feminino"};
+	char corCabelo[6][10] = {"Preto", "Castanho", "Loiro", "Vermelho", "Azul", "Branco"};
+	char hobby[5][25] = {"Caminhar", "Jogar", "Tocar instrumento(s)", "Ler", "Discutir"};
+	char feature[7][10] = {"Chapéu", "Boné", "Tatuagem", "Óculos", "Pulseira", "Anel", "Colar"};
 };
 
 struct tipoPersonagem {
@@ -27,7 +27,8 @@ struct tipoCaso {
 	char historiaGeral[999];
 	char historiaCidade[30][999];
 	char cidades[30][50];
-	char pistas[100][999];
+	char pistas[90][999];
+	char POI[90][20];
 	int numeroCidades;
 };
 
@@ -291,13 +292,21 @@ int main()
 														printf("\n\tAguarde enquanto lhe redirecionamos ao proximo passo...");
 													}
 
+													caso.numeroCidades = quantidade - 1;
 													Sleep(2000);
 
 													break;
 												}
-
 												else
 												{
+													for (int j; j < 3; j++)
+													{
+														printf("\n\n\tPonto de interesse %i da cidade %s: ",j+1, caso.cidades[i]);
+														fgets(caso.POI[(3*i)+j], 20, stdin);
+														printf("\n\n\tPista %i da cidade %s: ", j + 1, caso.cidades[i]);
+														fgets(caso.pistas[(3 * i) + j], 999, stdin);
+														system("cls");
+													}
 													for (i = 0; i < strlen(cleberson); i++)
 													{
 														if (cleberson[i] == '\n')
@@ -767,7 +776,7 @@ int main()
 
 									case alterarLogin: //----------------------------------------------------ALTERAR LOGIN
 
-													   //reserva = fopen("reserva.dat", "a+b");
+										//reserva = fopen("reserva.dat", "a+b");
 
 										system("cls");
 
@@ -1074,7 +1083,7 @@ int main()
 										break;
 										printf("\n\tSua opção: ");
 										scanf("%i", &opcaoemopcao);
-										if (opcaoemopcao > 0 && opcaoemopcao < 31) {
+										if (opcaoemopcao > 0 && opcaoemopcao < casoatual.numeroCidades + 1) {
 											printf("\n\n\t\tIndo para %s...", casoatual.cidades[opcaoemopcao - 1]);
 											temporestante -= 100;
 											stayinoption = false;
@@ -1197,7 +1206,7 @@ int oldPersona(tipoPersonagem* personagens)
 
 	for (i = 0; i < strlen(personaEscolhida); i++)
 	{
-		if (personaEscolhida[i] != ',' )
+		if (personaEscolhida[i] != ',')
 		{
 			minAjuda = personaEscolhida[i] - 49;
 			if (personaEscolhida[i + 1] != ',' && personaEscolhida[i + 1] != '\0')
