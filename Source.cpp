@@ -8,10 +8,10 @@
 
 struct checkPerson {
 	char nome[50];
-	char sexo[2][10] = {"Masculino", "Feminino"};
-	char corCabelo[6][10] = {"Preto", "Castanho", "Loiro", "Vermelho", "Azul", "Branco"};
-	char hobby[5][25] = {"Caminhar", "Jogar", "Tocar instrumento(s)", "Ler", "Discutir"};
-	char feature[7][10] = {"Chapéu", "Boné", "Tatuagem", "Óculos", "Pulseira", "Anel", "Colar"};
+	char sexo[2][10] = { "Masculino", "Feminino" };
+	char corCabelo[6][10] = { "Preto", "Castanho", "Loiro", "Vermelho", "Azul", "Branco" };
+	char hobby[5][25] = { "Caminhar", "Jogar", "Tocar instrumento(s)", "Ler", "Discutir" };
+	char feature[7][10] = { "Chapéu", "Boné", "Tatuagem", "Óculos", "Pulseira", "Anel", "Colar" };
 };
 
 struct tipoPersonagem {
@@ -83,7 +83,6 @@ int checkCarac(QualCaracteristica caracteristica);
 int main()
 {
 	setlocale(LC_ALL, "Portuguese");
-	char cleberson[50];
 	tipoCaso caso;
 	adminType adm, aux, cmp;
 	enum personas matsf;
@@ -98,10 +97,9 @@ int main()
 	FILE *admin;
 	FILE *reserva;
 	FILE *casos;
-	FILE *personagens;
 	tipoJogador jogador, auxlogin, player;
 	char resposta;
-	int quantidade = 0, i, qtdPersonas;
+	int quantidade = 0, i, qtdPersonas, contaCidade;
 	bool valido = true, login = true, jaescreveu, condicao = false;
 	bool sairalteracaoadm = false, logou = false, logFora, returntomenu = false;
 	char ajuda = 'N';
@@ -271,16 +269,16 @@ int main()
 											Sleep(2000);
 
 											quantidade = 1;
-
+											contaCidade = 0;
 											do //CIDADES
 											{
 												system("cls");
 												printf("\n\tAgora digite as cidades que farão parte do caso (MAX 30 cidades e 50 caracteres):");
 												printf("\n\tPara encerrar o cadastro digite 'Sair' (Sem as aspas)");
 												printf("\n\n\tDigite o nome da cidade %i: ", quantidade);
-												fgets(cleberson, 50, stdin); //30 cidades 50 caracteres
+												fgets(caso.cidades[contaCidade], 50, stdin); //30 cidades 50 caracteres
 
-												if (strcmp(cleberson, "Sair") == 0 || strcmp(cleberson, "sair") == 0 || strcmp(cleberson, "sair\n") == 0 || strcmp(cleberson, "Sair\n") == 0 && quantidade < 32)
+												if (strcmp(caso.cidades[contaCidade], "Sair") == 0 || strcmp(caso.cidades[contaCidade], "sair") == 0 || strcmp(caso.cidades[contaCidade], "sair\n") == 0 || strcmp(caso.cidades[contaCidade], "Sair\n") == 0 && quantidade < 32)
 												{
 													if (quantidade == 31)
 													{
@@ -299,21 +297,20 @@ int main()
 												}
 												else
 												{
-													for (int j; j < 3; j++)
+													for (i = 0; i < strlen(caso.cidades[contaCidade]); i++)
 													{
-														printf("\n\n\tPonto de interesse %i da cidade %s: ",j+1, caso.cidades[i]);
-														fgets(caso.POI[(3*i)+j], 20, stdin);
-														printf("\n\n\tPista %i da cidade %s: ", j + 1, caso.cidades[i]);
-														fgets(caso.pistas[(3 * i) + j], 999, stdin);
+														if (caso.cidades[contaCidade][i] == '\n')
+															caso.cidades[contaCidade][i] = '\0';
+													}
+													for (int j = 0; j < 3; j++)
+													{
+														printf("\n\n\tPonto de interesse %i da cidade %s: ", j + 1, caso.cidades[contaCidade]);
+														fgets(caso.POI[(3 * contaCidade) + j], 20, stdin);
+														printf("\n\n\tPista %i da cidade %s: ", j + 1, caso.cidades[contaCidade]);
+														fgets(caso.pistas[(3 * contaCidade) + j], 999, stdin);
 														system("cls");
 													}
-													for (i = 0; i < strlen(cleberson); i++)
-													{
-														if (cleberson[i] == '\n')
-															cleberson[i] = '\0';
-													}
-
-													strcpy(caso.cidades[quantidade - 1], cleberson);
+													contaCidade++;
 												}
 
 												quantidade++;
@@ -776,7 +773,7 @@ int main()
 
 									case alterarLogin: //----------------------------------------------------ALTERAR LOGIN
 
-										//reserva = fopen("reserva.dat", "a+b");
+													   //reserva = fopen("reserva.dat", "a+b");
 
 										system("cls");
 
@@ -1069,7 +1066,11 @@ int main()
 											printf("\t\t%s\n", casoatual.pistas[cidadeatual * 3 + opcaoemopcao - 1]);
 											temporestante -= 50;
 										}
-										else if (opcaoemopcao == 4) stayinoption = false;
+										else if (opcaoemopcao == 4)
+										{
+											stayinoption = false;
+											system("cls");
+										}
 										else printf("\n\t\tPista inválida\n");
 									}
 									break;
@@ -1086,6 +1087,7 @@ int main()
 										if (opcaoemopcao > 0 && opcaoemopcao < casoatual.numeroCidades + 1) {
 											printf("\n\n\t\tIndo para %s...", casoatual.cidades[opcaoemopcao - 1]);
 											temporestante -= 100;
+											Sleep(1500);
 											stayinoption = false;
 										}
 										else if (opcaoemopcao == 31) stayinoption = false;
@@ -1235,7 +1237,6 @@ void newPersona()
 	FILE* fd = fopen("personagem.dat", "a + b");
 	bool flag = false;
 	char resposta;
-	int i;
 	tipoPersonagem aux, ajudadora;
 
 	do {
@@ -1244,6 +1245,11 @@ void newPersona()
 		printf("\n\tDigite o nome do seu novo personagem: ");
 		getchar();
 		fgets(aux.nome, 50, stdin);
+		for (int t = 0; t < strlen(aux.nome); t++)
+		{
+			if (aux.nome[t] == '\n')
+				aux.nome[t] = '\0';
+		}
 
 		rewind(fd);
 
@@ -1356,6 +1362,7 @@ int checkCarac(QualCaracteristica caracteristica) {
 		} while (escolha < 1 || escolha > 7);
 		return escolha;
 	}
+	return caracteristica;
 }
 
 void cripto(char* key, char* orig, char* cript) {
@@ -1382,3 +1389,10 @@ void cripto(char* key, char* orig, char* cript) {
 		}
 	}
 }
+
+//for (int t = 0; t < strlen(caso.cidades[contaCidade]); t++)
+//{
+//	if (caso.cidades[contaCidade][t] == '\n')
+//		caso.cidades[contaCidade][t] = '\0';
+//}
+
