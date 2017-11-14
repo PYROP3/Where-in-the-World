@@ -1411,43 +1411,48 @@ void ranking()
 	FILE* fd = fopen("players.dat", "rb");
 	tipoJogador jogador, aux;
 	int maior = 0;
-	int opcao;
-
+	int opcao, quantMaior = 0, i;
+	int quantidadeJogadores;
+	int count;
 
 
 	system("cls");
 
 	printf("\n\tRanking dos jogadores!");
-	printf("\n\n\tDigite o modo de ordenacao: ");
+	printf("\n\n\tDigite o modo de ordenacao: \n");
 	printf("\n\t1. Por nome"); //Alfabeto	
 	printf("\n\t2. Por nivel"); //Pontos ordem cadastro
 	printf("\n\t3. Por ranking"); //Nivel = logo pontos desempatam
 	printf("\n\t4. Voltar");
+	printf("\n\n\tOpcao: ");
 	scanf("%i", &opcao);
-	
+
 	system("cls");
 
 	switch (opcao)
 	{
 	case 1:
-		
-		printf("Nome      Nivel      Ranking\n\n");
+
+		printf("\nNome      Nivel      Ranking\n\n");
 
 		do
 		{
 			fread(&aux, sizeof(tipoJogador), 1, fd);
-			maior = strcmp(aux.nome, );
-			
+			//maior = strcmp(aux.nome, );
+
 
 		} while (!feof(fd));
-		
+
 
 
 
 		break;
-	
+
 	case 2:
 
+		printf("\n\tPosicao      Nivel      Nome\n\n");
+		quantidadeJogadores = 0;
+		
 		do
 		{
 			fread(&jogador, sizeof(tipoJogador), 1, fd);
@@ -1455,21 +1460,43 @@ void ranking()
 			if (jogador.pontos >= maior)
 				maior = jogador.pontos;
 
+			quantidadeJogadores++;
+
 		} while (!feof(fd));
 
 		rewind(fd);
 
+		quantMaior = 0;
+		i = 1;
+		count = 0;
+		
 		do
 		{
 			fread(&aux, sizeof(tipoJogador), 1, fd);
 
-			if (aux.pontos >= maior)
+			if (aux.pontos == maior && !feof(fd))
 			{
+				printf("\t   %i           %i        %s\n", i, aux.pontos / 100, aux.nome);
+				count++;
+				i++;
+			}    
+			if (feof(fd))
+			{
+				if (count == quantidadeJogadores)
+					break;
 
+				rewind(fd);
+				maior--;
 			}
 
-		} while (!feof(fd));
+		} while (true);
+
+		rewind(fd);
+
+		
+
 		break;
+
 	case 3:
 		break;
 	case 4:
@@ -1477,7 +1504,7 @@ void ranking()
 	default:
 		break;
 	}
-		
+
 
 
 }
