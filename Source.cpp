@@ -30,6 +30,8 @@ struct tipoCaso {
 	char pistas[90][999];
 	char POI[90][20];
 	int numeroCidades;
+	int quantSusp;
+	int culpado;
 };
 
 struct adminType {
@@ -114,6 +116,8 @@ int main()
 	int cidadeatual = 0;
 	int opcaoemopcao;
 	int opcaoemjogo;
+	int contaSuspeitos;
+	char suspeitos[30][50];
 	bool stayinoption = true;
 	bool temMandato = false;
 	tipoPersonagem retratofalado;
@@ -151,7 +155,7 @@ int main()
 							}
 							else
 							{
-							//	fclose(admin);
+								//	fclose(admin);
 
 								printf("\n\tOpção 1. Cadastro de Administrador:\n\n\tNome: ");
 								getchar();
@@ -358,9 +362,12 @@ int main()
 											default:
 												break;
 											}
+											printf("\n\tPara finalizar, quem será o culpado neste caso? (Conforme a tabela acima)\n\tOpção: ");
+											scanf("%i", &caso.culpado);
 
 											system("cls");
 
+											caso.quantSusp = qtdPersonas;
 											for (i = 0; i < qtdPersonas; i++)
 											{
 												strcpy(caso.personagens[i].nome, personagem[i].nome);
@@ -546,7 +553,7 @@ int main()
 
 					printf("\n\tCadastro realizado com sucesso! Aguarde um momento...");
 					logou = true;
-					//Sleep(2000);
+					Sleep(2000);
 
 					break; //-------------------------------------------------------------------FIM LOGIN CADASTRO JOGADOR
 
@@ -1048,8 +1055,8 @@ int main()
 							casoatualDesc = fopen("casos.dat", "r + b");
 							//fseek(casoatualDesc, casoparaloadar * sizeof(tipoCaso), 0);//Achar o caso específico para carregar
 							fread(&casoatual, sizeof(tipoCaso), 1, casoatualDesc);
-							
-							
+
+
 							while (!gameover && temporestante > 0) {
 								system("cls");
 								printf("\n\t\tCaso número %i\n", casoparaloadar);
@@ -1103,7 +1110,6 @@ int main()
 										printf("\n");
 										for (int i = 0; i < casoatual.numeroCidades; i++)
 											printf("\t\t%i - %s\n", i + 1, casoatual.cidades[i]);
-										
 										printf("\n\tSua opção: ");
 										scanf("%i", &opcaoemopcao);
 										if (opcaoemopcao > 0 && opcaoemopcao < casoatual.numeroCidades + 1) {
@@ -1149,9 +1155,24 @@ int main()
 										case corDeCabelo: retratofalado.corCabelo = newval; break;
 										case Hobby: retratofalado.hobby = newval; break;
 										case Feature: retratofalado.feature = newval; break;
-										case 4: for (int k = 0; k < ) {
-											// contar personagens suspeitos
+										case 4: printf("\n\n\t--------- Computando possíveis suspeitos... ----------\n\n");
+											contaSuspeitos = 0;
+										for (int k = 0; k < casoatual.quantSusp; k++) {
+											if (retratofalado.sexo == casoatual.personagens[k].sexo && retratofalado.corCabelo == casoatual.personagens[k].corCabelo && retratofalado.hobby == casoatual.personagens[k].hobby && retratofalado.feature == casoatual.personagens[k].feature)
+											{
+												printf("\t\t-> %s\n", casoatual.personagens[k]);
+												strcpy(suspeitos[contaSuspeitos], casoatual.personagens[k].nome);
+												contaSuspeitos++;
+											}											
+										}										
+										printf("\n\n\t---------- Fim da lista de suspeitos ----------\n");
+										if (contaSuspeitos == 1)
+										{
+											temMandato = true;
+											printf("\n\t\tFoi emitido o mandato de prisão para o(a) %s\n", suspeitos[0]);
 										}
+										contaSuspeitos = 0;
+											break;
 										case 5: stayinoption = false; break;
 										default: printf("\n\tCaracterística inválida\n"); break;
 										}
@@ -1200,7 +1221,7 @@ int main()
 int oldPersona(tipoPersonagem* personagens)
 {
 	FILE* fd = fopen("personagem.dat", "a + b");
-	int i = 0, qtdPersonas = 0, minAjuda = 0, j = 0;
+	int i = 0, qtdPersonas = 0, minAjuda = 0, j = 0, culpado =0;
 	char personaEscolhida[200];
 	tipoPersonagem aux[300], intermediaria;
 	checkPerson checarCaract;
@@ -1235,7 +1256,7 @@ int oldPersona(tipoPersonagem* personagens)
 
 	printf("\n\tOpções (digite os números separados por vírgula, MAX 100 personagens): ");
 	scanf("%s", personaEscolhida);
-
+	system("cls");
 	for (i = 0; i < strlen(personaEscolhida); i++)
 	{
 		if (personaEscolhida[i] != ',')
@@ -1252,8 +1273,9 @@ int oldPersona(tipoPersonagem* personagens)
 			personagens[j].corCabelo = aux[minAjuda].corCabelo;
 			personagens[j].hobby = aux[minAjuda].hobby;
 			personagens[j].feature = aux[minAjuda].feature;
-
 			j++;
+			printf("\t%i. %s do sexo %s, cabelo %s,", j, personagens[j-1].nome, personagens[j-1].sexo, personagens[j-1].corCabelo);
+			printf(" gosta de %s e seu símbolo marcante é %s \n", personagens[j-1].hobby, personagens[j-1].feature);
 		}
 	}
 
