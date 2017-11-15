@@ -1160,20 +1160,6 @@ int main()
 
 	} while (log != sair);
 
-	//newPersona();
-	//oldPersona(personagem);
-	/*casos = fopen("casos.dat", "a + b");
-
-	fread(&caso, sizeof(caso), 1, casos);
-
-	printf("%s\n", caso.personagens[0].nome);
-	printf("%s\n", caso.personagens[1].nome);
-	printf("%s\n", caso.personagens[2].nome);
-
-	fclose(casos);
-	*/
-	ranking();
-
 	return 0;
 }
 
@@ -1411,10 +1397,13 @@ void ranking()
 	FILE* fd = fopen("players.dat", "rb");
 	tipoJogador jogador, aux;
 	int maior = 0;
-	int opcao, quantMaior = 0, i;
+	int opcao, quantMaior = 0, i, j, min;
 	int quantidadeJogadores;
 	int count;
-
+	int tamAsc;
+	int point[500], xx;
+	char m[500][30], x[30], tecla;
+	bool primeiro = true, sgundo = true;
 
 	system("cls");
 
@@ -1433,31 +1422,107 @@ void ranking()
 	{
 	case 1:
 
-		printf("\nNome      Nivel      Ranking\n\n");
+		printf("\n\tNivel      Nome\n\n");
+		quantidadeJogadores = 0;
+		tamAsc = 0;
+		primeiro = true;
+		i = 0;
 
 		do
 		{
-			fread(&aux, sizeof(tipoJogador), 1, fd);
-			//maior = strcmp(aux.nome, );
+			fread(&jogador, sizeof(tipoJogador), 1, fd);
 
+			if (!feof(fd))
+			{
+				strcpy(m[i], jogador.nome);
+				point[i] = jogador.pontos;
+				quantidadeJogadores++;
+			}
+			i++;
 
 		} while (!feof(fd));
 
+		for (i = 0; i < quantidadeJogadores; i++)
+		{
+			for (j = 0; j < quantidadeJogadores - 1; j++)
+			{
+				if (strcmp(m[j], m[j + 1]) > 0)
+				{
+					strcpy(x, m[j]);
+					xx = point[j];
+					strcpy(m[j], m[j + 1]);
+					point[j] = point[j + 1];
+					strcpy(m[j + 1], x);
+					point[j + 1] = xx;
+				}
+			}
+		}
 
-
+		for (i = 0; i < quantidadeJogadores; i++)
+		{
+			printf("\t%i         %s\n", point[i] / 100, m[i]);
+		}
 
 		break;
+
 
 	case 2:
 
 		printf("\n\tPosicao      Nivel      Nome\n\n");
 		quantidadeJogadores = 0;
-		
+
 		do
 		{
 			fread(&jogador, sizeof(tipoJogador), 1, fd);
 
-			if (jogador.pontos >= maior)
+			if ((jogador.pontos / 100) >= maior)
+				maior = jogador.pontos / 100;
+
+			quantidadeJogadores++;
+
+		} while (!feof(fd));
+
+		rewind(fd);
+
+		quantMaior = 0;
+		i = 1;
+		count = 0;
+
+		do
+		{
+			fread(&aux, sizeof(tipoJogador), 1, fd);
+
+			if ((aux.pontos / 100) == maior && !feof(fd))
+			{
+				printf("\t   %i           %i        %s\n", i, aux.pontos / 100, aux.nome);
+				count++;
+				i++;
+			}
+			if (feof(fd))
+			{
+				if (count == quantidadeJogadores - 1)
+					break;
+
+				rewind(fd);
+				maior--;
+			}
+
+		} while (count != quantidadeJogadores - 1);
+
+		rewind(fd);
+
+		break;
+
+	case 3:
+
+		printf("\n\tRanking      Nivel      Nome\n\n");
+		quantidadeJogadores = 0;
+
+		do
+		{
+			fread(&jogador, sizeof(tipoJogador), 1, fd);
+
+			if ((jogador.pontos) >= maior)
 				maior = jogador.pontos;
 
 			quantidadeJogadores++;
@@ -1469,7 +1534,7 @@ void ranking()
 		quantMaior = 0;
 		i = 1;
 		count = 0;
-		
+
 		do
 		{
 			fread(&aux, sizeof(tipoJogador), 1, fd);
@@ -1479,32 +1544,29 @@ void ranking()
 				printf("\t   %i           %i        %s\n", i, aux.pontos / 100, aux.nome);
 				count++;
 				i++;
-			}    
+			}
 			if (feof(fd))
 			{
-				if (count == quantidadeJogadores)
+				if (count == quantidadeJogadores - 1)
 					break;
 
 				rewind(fd);
 				maior--;
 			}
 
-		} while (true);
+		} while (count != quantidadeJogadores - 1);
 
 		rewind(fd);
 
-		
-
-		break;
-
-	case 3:
 		break;
 	case 4:
+		fclose(fd);
 		break;
 	default:
 		break;
 	}
 
-
-
+	printf("\n\n\tDigite qualquer tecla pra continuar...");
+	getchar();
+	scanf("%c", &tecla);
 }
