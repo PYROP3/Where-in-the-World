@@ -1568,5 +1568,6 @@ void ranking()
 
 	printf("\n\n\tDigite qualquer tecla pra continuar...");
 	getchar();
+	fclose(fd);
 	scanf("%c", &tecla);
 }
