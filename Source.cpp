@@ -27,11 +27,14 @@ struct tipoCaso {
 	char historiaGeral[999];
 	char historiaCidade[30][999];
 	char cidades[30][50];
+	char pessoaDica[90][50];
 	char pistas[90][999];
 	char POI[90][20];
+	char nomeCaso[40];
 	int numeroCidades;
 	int quantSusp;
-	int culpado;
+	int culpado[3];//Aqui guardaremos tres variáveis, 1.Quem é, 2.Em que lugar, 3.Em qual POI
+	int dificuldade;
 };
 
 struct adminType {
@@ -55,7 +58,7 @@ enum admOptions {
 	cadastroadm = 1, loginadm, returnmenu
 };
 enum admLoginOptions {
-	chgn = 1, chgl, chgs, cadastrocasos, cadastropersonagem, removecasos, deladm, chgsair
+	chgn = 1, chgl, chgs, cadastrocasos, cadastropersonagem, deladm, chgsair
 };
 enum playerOptions {
 	cadastroJogador = 1, loginjogador, saair
@@ -82,6 +85,9 @@ void newPersona();
 int oldPersona(tipoPersonagem* personagem);
 int checkCarac(QualCaracteristica caracteristica);
 void rightTime(int tempo);
+void writeout(char*, bool);
+int returncustomtimer(char);
+int checkforcommand(char*, int);
 
 int main()
 {
@@ -102,8 +108,8 @@ int main()
 	FILE *casos;
 	tipoJogador jogador, auxlogin, player;
 	char resposta;
-	int quantidade = 0, i, qtdPersonas, contaCidade;
-	bool valido = true, login = true, jaescreveu, condicao = false;
+	int quantidade = 0, i, qtdPersonas, contaCidade, auxiliar;
+	bool valido = true, login = true, jaescreveu, condicao = false, apagar = false;
 	bool sairalteracaoadm = false, logou = false, logFora, returntomenu = false;
 	char ajuda = 'N';
 
@@ -120,13 +126,14 @@ int main()
 	char suspeitos[30][50];
 	bool stayinoption = true;
 	bool temMandato = false;
+	char texto[999];
 	tipoPersonagem retratofalado;
 
 	do {
 		system("cls");
 		system("color F2");
 		printf("\n\tBem vindo ao jogo Where in the world!");
-		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpcao desejada: ");
+		printf("\n\tDeseja logar como administrador ou jogador?\n\n\t1. Administrador\n\t2. Jogador\n\t3. Sair\n\n\tOpção desejada: ");
 		scanf("%i", &log);
 
 		if (log != sair)
@@ -213,7 +220,7 @@ int main()
 								{
 									do {
 										printf("\n\tLogin bem sucedido!\n\tSr(a) %s\tQuais das opções deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha", aux.nome);
-										printf("\n\t4. Cadastrar caso\n\t5. Cadastrar personagem \n\t6. Remover caso\n\t7. Excluir credencial de administrador\n\t8. Sair\n\n\tOpcao desejada: ");
+										printf("\n\t4. Cadastrar caso\n\t5. Cadastrar personagem\n\t6. Excluir credencial de administrador\n\t7. Sair\n\n\tOpcao desejada: ");
 										scanf("%i", &casesloginadm);
 										system("cls");
 										admin = fopen("logincripto.dat", "w+b");
@@ -266,8 +273,15 @@ int main()
 
 											system("cls");
 											printf("\n\tOpção 1.2.4. Cadastrar casos:");
-											printf("\n\n\tPrimeiro digite a história do caso (MAX 999 caracteres): ");
+											printf("\n\n\tPrimeiro digite o nome do caso (MAX 40 caracteres): ");
 											getchar();
+											fgets(caso.nomeCaso, 40, stdin);
+
+											printf("\n\tNome do caso cadastrado com sucesso! Aguarde um momento....");
+											Sleep(1000);
+											system("cls");
+
+											printf("\n\n\tDigite a história do caso ""%s"" (MAX 999 caracteres): ", caso.nomeCaso);
 											fgets(caso.historiaGeral, 999, stdin);
 
 											printf("\n\tHistória cadastrada com sucesso! Aguarde um momento....");
@@ -278,60 +292,87 @@ int main()
 											do //CIDADES
 											{
 												system("cls");
+
 												printf("\n\tAgora digite as cidades que farão parte do caso (MAX 30 cidades e 50 caracteres):");
+												printf("\n\tLembre-se que a primeira cidade será a cidade inicial, ou seja, a cidade que o jogador começará");
 												printf("\n\tPara encerrar o cadastro digite 'Sair' (Sem as aspas)");
 												printf("\n\n\tDigite o nome da cidade %i: ", quantidade);
 												fgets(caso.cidades[contaCidade], 50, stdin); //30 cidades 50 caracteres
 
 												if (strcmp(caso.cidades[contaCidade], "Sair") == 0 || strcmp(caso.cidades[contaCidade], "sair") == 0 || strcmp(caso.cidades[contaCidade], "sair\n") == 0 || strcmp(caso.cidades[contaCidade], "Sair\n") == 0 && quantidade < 32)
 												{
-													if (quantidade == 31)
-													{
-														system("cls");
-														printf("\n\tLimite máximo de cidades atingido! Aguarde enquanto vamos ao proximo passo...");
+													if (!contaCidade) {
+														printf("\n\tDigite pelo menos uma cidade!\n");
+														Sleep(2000);
 													}
 													else
 													{
-														printf("\n\tAguarde enquanto lhe redirecionamos ao proximo passo...");
-													}
-
-													caso.numeroCidades = quantidade - 1;
-													Sleep(2000);
-
-													break;
+														if (quantidade == 31)
+														{
+															system("cls");
+															printf("\n\tLimite máximo de cidades atingido! Aguarde enquanto vamos ao proximo passo...");
+														}
+														else
+														{
+															printf("\n\tAguarde enquanto lhe redirecionamos ao proximo passo...");
+														}
+														caso.numeroCidades = quantidade - 1;
+														Sleep(2000);
+														break;
+													}																								
 												}
 												else
 												{
 													for (i = 0; i < strlen(caso.cidades[contaCidade]); i++)
 													{
-														if (caso.cidades[contaCidade][i] == '\n')
+														if (caso.cidades[contaCidade][i] == '\n' && !((caso.cidades[contaCidade][i+1] <= 'Z' &&  caso.cidades[contaCidade][i + 1] >= 'A') || (caso.cidades[contaCidade][i + 1] <= 'z' &&  caso.cidades[contaCidade][i + 1] >= 'a')))
 															caso.cidades[contaCidade][i] = '\0';
 													}
 													for (int j = 0; j < 3; j++)
 													{
+														system("cls");
 														printf("\n\n\tPonto de interesse %i da cidade %s: ", j + 1, caso.cidades[contaCidade]);
 														fgets(caso.POI[(3 * contaCidade) + j], 20, stdin);
 														for (int t = 0; t < strlen(caso.POI[(3 * contaCidade) + j]); t++)
 														{
-															if (caso.POI[(3 * contaCidade) + j][t] == '\n')
+															if (caso.POI[(3 * contaCidade) + j][t] == '\n' && !((caso.POI[(3 * contaCidade) + j][t + 1] <= 'Z' &&  caso.POI[(3 * contaCidade) + j][t + 1] >= 'A') || (caso.POI[(3 * contaCidade) + j][t + 1] <= 'z' &&  caso.POI[(3 * contaCidade) + j][t + 1] >= 'a')))
 																caso.POI[(3 * contaCidade) + j][t] = '\0';
 														}
+														
 														printf("\n\n\tPista %i da cidade %s: ", j + 1, caso.cidades[contaCidade]);
 														fgets(caso.pistas[(3 * contaCidade) + j], 999, stdin);
+
+														printf("\n\n\tNome de quem dará a pista %i: ", j + 1);
+														fgets(caso.pessoaDica[(3 * contaCidade) + j], 50, stdin);
+														for (int t = 0; t < strlen(caso.pessoaDica[(3 * contaCidade) + j]); t++)
+														{
+															if (caso.pessoaDica[(3 * contaCidade) + j][t] == '\n' && !((caso.pessoaDica[(3 * contaCidade) + j][t + 1] <= 'Z' &&  caso.pessoaDica[(3 * contaCidade) + j][t + 1] >= 'A') || (caso.pessoaDica[(3 * contaCidade) + j][t + 1] <= 'z' &&  caso.pessoaDica[(3 * contaCidade) + j][t + 1] >= 'a')))
+																caso.pessoaDica[(3 * contaCidade) + j][t] = '\0';
+														}
 														system("cls");
 													}
 													contaCidade++;
 												}
-
-												quantidade++;
-
+												if(contaCidade > 0)
+													quantidade++;
 											} while (true);
+											system("cls");
+											do {
+												
+												printf("\n\tInforme agora os números(separados por ponto) X.Y:");
+												printf("\n\tX - O número da cidade onde o culpado estará;");
+												printf("\n\tY - O número do ponto de interesse em que o culpado estará");
+												printf("\n\tExemplos de entrada: 1.3 , 12.2 , 2.1");
+												scanf("%i.%i", caso.culpado[1], caso.culpado[2]);
+												system("cls");
+												printf("\n\tDigite um valor válido!");
+											} while (caso.culpado[1] <= caso.numeroCidades && (caso.culpado[2] < 4 && caso.culpado[2] > 0));
 
 											for (i = 0; i < quantidade - 1; i++)
 											{
 												system("cls");
 												printf("\n\tCadastre agora a descrição / história de cada cidade (MAX 999 Caracteres):");
-												printf("\n\n\tHistoria da cidade %s: ", caso.cidades[i]);
+												printf("\n\n\tHistória da cidade %s: ", caso.cidades[i]);
 												fflush(stdin);
 												//getchar();
 												fgets(caso.historiaCidade[i], 999, stdin);
@@ -362,9 +403,19 @@ int main()
 											default:
 												break;
 											}
-											printf("\n\tPara finalizar, quem será o culpado neste caso? (Conforme a tabela acima)\n\tOpção: ");
+											printf("\n\tQuem será o culpado neste caso? (Conforme a tabela acima)\n\tOpção: ");
 											scanf("%i", &caso.culpado);
-
+											system("cls");
+											do {
+												printf("\n\tPara finalizar, qual a dificuldade do caso?");
+												printf("\n\t1. Fácil (Para jogadores Novatos);");
+												printf("\n\t2. Médio (Para jogadores Experientes)");
+												printf("\n\t3. Difícil (Para jogadores Veteranos)");
+												printf("\n\tOpção: ");
+												scanf("%i", &caso.dificuldade);
+												system("cls");
+												printf("\n\tDigite um valor válido!");
+											} while (caso.dificuldade > 0 && caso.dificuldade < 4);
 											system("cls");
 
 											caso.quantSusp = qtdPersonas;
@@ -380,9 +431,8 @@ int main()
 											Sleep(1000);
 
 											fwrite(&caso, sizeof(tipoCaso), 1, casos);
-
 											fclose(casos);
-
+											
 											break;
 
 										case cadastropersonagem:
@@ -393,17 +443,7 @@ int main()
 											newPersona(); //=================AQUIIII BURROOOOO
 
 											break;
-
-										case removecasos:
-
-											fwrite(&aux, sizeof(adminType), 1, admin);
-											fclose(admin);
-
-											fclose(admin);
-											system("cls");
-											printf("\tOpção 1.2.5. Remover casos:\n\n");
-											system("cls");
-											break;
+																		
 
 										case deladm:
 
@@ -680,13 +720,13 @@ int main()
 									system("cls");
 
 									printf("\n\tSeja bem vindo %s", jogador.nome);
-									printf("\n\n\tPor gentileza insira a opcao desejada:");
+									printf("\n\n\tPor gentileza insira a opção desejada:");
 									printf("\n\n\t1. Alterar nome");
 									printf("\n\t2. Alterar login");
 									printf("\n\t3. Alterar senha");
 									printf("\n\t4. Excluir conta");
 									printf("\n\t5. Voltar");
-									printf("\n\n\tDigite a opcao desejada: ");
+									printf("\n\n\tDigite a opção desejada: ");
 									scanf("%i", &change);
 
 									switch (change)
@@ -697,7 +737,7 @@ int main()
 
 										system("cls");
 
-										printf("\n\tOpcao escolhida 1.Alterar nome");
+										printf("\n\tOpção escolhida 1.Alterar nome");
 										printf("\n\n\tDigite o novo nome: ");
 										scanf("%s", &player.nome);
 
@@ -725,7 +765,7 @@ int main()
 											{
 												system("cls");
 
-												printf("\n\tNome ja cadastrado!\n");
+												printf("\n\tNome já cadastrado!\n");
 												printf("\n\tTente digitar um nome diferente: ");
 												scanf("%s", player.nome);
 											}
@@ -790,7 +830,7 @@ int main()
 
 										system("cls");
 
-										printf("\n\tOpcao escolhida 2.Alterar alterar login");
+										printf("\n\tOpção escolhida 2.Alterar alterar login");
 										printf("\n\n\tDigite o novo login: ");
 										scanf("%s", &player.login);
 
@@ -821,7 +861,7 @@ int main()
 											{
 												system("cls");
 
-												printf("\n\n\tLogin ja cadastrado!\n");
+												printf("\n\n\tLogin já cadastrado!\n");
 												printf("\n\tTente digitar um login diferente: ");
 												scanf("%s", player.login);
 											}
@@ -886,7 +926,7 @@ int main()
 
 										system("cls");
 
-										printf("\n\tOpcao escolhida 3.Alterar senha");
+										printf("\n\tOpção escolhida 3.Alterar senha");
 										printf("\n\n\tDigite a nova senha: ");
 										scanf("%s", &player.senha);
 
@@ -1157,21 +1197,21 @@ int main()
 										case Feature: retratofalado.feature = newval; break;
 										case 4: printf("\n\n\t--------- Computando possíveis suspeitos... ----------\n\n");
 											contaSuspeitos = 0;
-										for (int k = 0; k < casoatual.quantSusp; k++) {
-											if (retratofalado.sexo == casoatual.personagens[k].sexo && retratofalado.corCabelo == casoatual.personagens[k].corCabelo && retratofalado.hobby == casoatual.personagens[k].hobby && retratofalado.feature == casoatual.personagens[k].feature)
+											for (int k = 0; k < casoatual.quantSusp; k++) {
+												if (retratofalado.sexo == casoatual.personagens[k].sexo && retratofalado.corCabelo == casoatual.personagens[k].corCabelo && retratofalado.hobby == casoatual.personagens[k].hobby && retratofalado.feature == casoatual.personagens[k].feature)
+												{
+													printf("\t\t-> %s\n", casoatual.personagens[k]);
+													strcpy(suspeitos[contaSuspeitos], casoatual.personagens[k].nome);
+													contaSuspeitos++;
+												}
+											}
+											printf("\n\n\t---------- Fim da lista de suspeitos ----------\n");
+											if (contaSuspeitos == 1)
 											{
-												printf("\t\t-> %s\n", casoatual.personagens[k]);
-												strcpy(suspeitos[contaSuspeitos], casoatual.personagens[k].nome);
-												contaSuspeitos++;
-											}											
-										}										
-										printf("\n\n\t---------- Fim da lista de suspeitos ----------\n");
-										if (contaSuspeitos == 1)
-										{
-											temMandato = true;
-											printf("\n\t\tFoi emitido o mandato de prisão para o(a) %s\n", suspeitos[0]);
-										}
-										contaSuspeitos = 0;
+												temMandato = true;
+												printf("\n\t\tFoi emitido o mandato de prisão para o(a) %s\n", suspeitos[0]);
+											}
+											contaSuspeitos = 0;
 											break;
 										case 5: stayinoption = false; break;
 										default: printf("\n\tCaracterística inválida\n"); break;
@@ -1221,7 +1261,7 @@ int main()
 int oldPersona(tipoPersonagem* personagens)
 {
 	FILE* fd = fopen("personagem.dat", "a + b");
-	int i = 0, qtdPersonas = 0, minAjuda = 0, j = 0, culpado =0;
+	int i = 0, qtdPersonas = 0, minAjuda = 0, j = 0, culpado = 0;
 	char personaEscolhida[200];
 	tipoPersonagem aux[300], intermediaria;
 	checkPerson checarCaract;
@@ -1274,8 +1314,8 @@ int oldPersona(tipoPersonagem* personagens)
 			personagens[j].hobby = aux[minAjuda].hobby;
 			personagens[j].feature = aux[minAjuda].feature;
 			j++;
-			printf("\t%i. %s do sexo %s, cabelo %s,", j, personagens[j-1].nome, personagens[j-1].sexo, personagens[j-1].corCabelo);
-			printf(" gosta de %s e seu símbolo marcante é %s \n", personagens[j-1].hobby, personagens[j-1].feature);
+			printf("\t%i. %s do sexo %s, cabelo %s,", j, personagens[j - 1].nome, personagens[j - 1].sexo, personagens[j - 1].corCabelo);
+			printf(" gosta de %s e seu símbolo marcante é %s \n", personagens[j - 1].hobby, personagens[j - 1].feature);
 		}
 	}
 
@@ -1453,6 +1493,54 @@ void rightTime(int tempo) {
 	printf(", %02d minutos", temp);
 	tempo %= 60;
 	printf(", %02d segundos\n\n", tempo);
+}
+//INC
+void writeout(char* texto, bool pauseonnewline) {
+	bool backandforth = true;
+	int add;
+	for (unsigned int i = 0; i < strlen(texto); i++) {
+		if (pauseonnewline && texto[i] == '\n')
+			system("pause");
+		add = checkforcommand(texto, i);
+		if (add == 0) {
+			printf("%c", texto[i]);
+			Sleep(returncustomtimer(texto[i]));
+		}
+		i += add;
+	}
+}
+
+int returncustomtimer(char c) {
+	switch (c) {
+	case '.': return 500;
+	case ',': return 200;
+	case ';': return 1000;
+	default: return 100;
+	}
+}
+
+int checkforcommand(char* texto, int curindex) {
+	char rcv[20];
+	char cmp[20];
+	char cmd[20];
+	int j, t;
+	rcv[0] = '\0';
+	strcpy(cmp, "system(\"");
+	for (j = curindex; j < curindex + 8; j++)
+		rcv[j - curindex] = texto[j];
+	rcv[j - curindex] = '\0';
+	if (strcmp(cmp, rcv) == 0) {
+		t = 0;
+		while (texto[j] != '\"') {
+			cmd[t] = texto[j];
+			j++;
+			t++;
+		}
+		cmd[t] = '\0';
+		system(cmd);
+		return j + 3 - curindex;
+	}
+	return 0;
 }
 
 //for (int t = 0; t < strlen(caso.cidades[contaCidade]); t++)
