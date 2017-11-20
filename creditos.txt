@@ -1,0 +1,13 @@
+
+	Projeto de APC B - Segundo Semestre de Engenharia de Computacao 2017
+	Ministrada pela Prof. Patricia Cavoto
+
+	Creditos:
+
+	- Bruno;
+	- Caio;
+	- Marcos;
+
+	Agradecemos a oportunidade e a dificuldade oferecida pelo projeto!
+
+	
