@@ -385,7 +385,7 @@ int main()
 													for (int j = 0; j < 3; j++)
 													{
 														system("cls");
-														printf("\n\n\tPonto de interesse %i do local \"%s\": ", j + 1, caso.cidades[contaCidade]);
+														printf("\n\n\tPonto de interesse %i do local \"%s\" (MAX 20 carac.):\n\t", j + 1, caso.cidades[contaCidade]);
 														fgets(caso.POI[(3 * contaCidade) + j], 20, stdin);
 														for (int t = 0; t < strlen(caso.POI[(3 * contaCidade) + j]); t++)
 														{
@@ -393,10 +393,10 @@ int main()
 																caso.POI[(3 * contaCidade) + j][t] = '\0';
 														}
 														
-														printf("\n\n\tPista %i do local \"%s\": ", j + 1, caso.cidades[contaCidade]);
+														printf("\n\n\tPista %i do local \"%s\" (MAX 999 carac.): ", j + 1, caso.cidades[contaCidade]);
 														fgets(caso.pistas[(3 * contaCidade) + j], 999, stdin);
 
-														printf("\n\n\tNome de quem dará a pista %i: ", j + 1);
+														printf("\n\n\tNome de quem dará a pista %i (MAX 50 carac.): ", j + 1);
 														fgets(caso.pessoaDica[(3 * contaCidade) + j], 50, stdin);
 														for (int t = 0; t < strlen(caso.pessoaDica[(3 * contaCidade) + j]); t++)
 														{
@@ -412,7 +412,15 @@ int main()
 											} while (true);
 											system("cls");
 											do {//"coordenadas" da cidade e do POI que o culpado está
-												
+												for (int t = 0; t < caso.numeroCidades; t++)
+												{
+													printf("\n\t%i . %s", t+1, caso.cidades[t]);
+													for (int m = 0; m < 3; m++)
+													{
+														printf("\n\t\t%i . %s", m + 1, caso.POI[(t*3)+m]);
+													}
+													printf("\n");
+												}
 												printf("\n\tInforme agora os números(separados por ponto) X.Y:");
 												printf("\n\tX - O número da cidade onde o culpado estará;");
 												printf("\n\tY - O número do ponto de interesse em que o culpado estará");
@@ -430,8 +438,8 @@ int main()
 												}	
 												system("cls");
 												printf("\n\tDigite um valor válido!");
-											} while (caso.culpado[1] > caso.numeroCidades && !(caso.culpado[2] < 3 && caso.culpado[2] > -1));
-
+											} while ((caso.culpado[1] > caso.numeroCidades || caso.culpado[1] < 0) && !(caso.culpado[2] < 3 && caso.culpado[2] > -1));
+											getchar();
 											//Cadastro da descrição
 											for (i = 0; i < quantidade - 1; i++)
 											{
@@ -1224,7 +1232,7 @@ int main()
 
 										casoatualDesc = fopen("casos.dat", "r + b");
 
-										if (jogador.saved)
+										if (jogador.saved == true)
 										{
 											casoSalvoEncontrado = true;
 											while (casoSalvoEncontrado == true)
@@ -1238,7 +1246,7 @@ int main()
 													strcpy(casoatual.cidades[cidadeatual], jogador.cidadeAtual);
 												}
 											}
-											jogador.saved == false;
+											jogador.saved = false;
 										}
 										else
 										{
@@ -1255,7 +1263,7 @@ int main()
 											jogador.retratoFalado.feature = 8;
 										}
 										gameover = false;
-										while ((!gameover && temporestante > 0) && jogador.saved == false) {
+										while (gameover == false && temporestante > 0 && jogador.saved == false) {
 											ingame = true;
 											system("cls");
 											printf("\n\t\t");
@@ -1473,23 +1481,27 @@ int main()
 													printf("\n\t\tOpção:\n\t\t");
 													printMenu(70, true, true);
 													scanf("%i", &opcaoemopcao);
-													if (opcaoemopcao >= i)
-														opcaoemopcao++;													
-													if (opcaoemopcao > 0 && opcaoemopcao < casoatual.numeroCidades + 1) {
-														printf("\n\n\t\t");
-														strcpy(texto, "Indo para ");
-														writeout(texto, false, false);
-														writeout(casoatual.cidades[opcaoemopcao - 1], false, false);
-														strcpy(texto, "...");
-														writeout(texto, true, false);
-
-														cidadeatual = opcaoemopcao - 1;
-														temporestante -= casoatual.tempoEntreLocais;
-														Sleep(1500);
+													if(opcaoemopcao == 0)
 														stayinoption = false;
-													}
-													else if (opcaoemopcao == 0) stayinoption = false;
-													else printf("\n\tCidade inválida\n");
+													else
+													{
+														if (opcaoemopcao >= i)
+															opcaoemopcao++;
+														if (opcaoemopcao > 0 && opcaoemopcao < casoatual.numeroCidades + 1) {
+															printf("\n\n\t\t");
+															strcpy(texto, "Indo para ");
+															writeout(texto, false, false);
+															writeout(casoatual.cidades[opcaoemopcao - 1], false, false);
+															strcpy(texto, "...");
+															writeout(texto, true, false);
+
+															cidadeatual = opcaoemopcao - 1;
+															temporestante -= casoatual.tempoEntreLocais;
+															Sleep(1500);
+															stayinoption = false;
+														}
+														else printf("\n\tCidade inválida\n");
+													}													
 												}
 												break;
 											case 3://Retrato falado
@@ -1676,7 +1688,7 @@ int main()
 
 						break;
 					case rank:
-						//void ranking();
+						ranking();
 						break;
 
 					case saair:
