@@ -11,7 +11,7 @@ struct checkPerson {
 	char sexo[3][10] = { "Masculino", "Feminino", " - " };
 	char corCabelo[7][10] = { "Preto", "Castanho", "Loiro", "Vermelho", "Azul", "Branco", " - " };
 	char hobby[6][25] = { "Caminhar", "Jogar", "Tocar instrumento(s)", "Ler", "Discutir", " - " };
-	char feature[8][10] = { "Chap√©u", "Bon√©", "Tatuagem", "√ìculos", "Pulseira", "Anel", "Colar" , " - " };
+	char feature[8][10] = { "ChapÈu", "BonÈ", "Tatuagem", "”culos", "Pulseira", "Anel", "Colar" , " - " };
 };
 
 struct tipoPersonagem {
@@ -33,7 +33,7 @@ struct tipoCaso {
 	char nomeCaso[40];
 	int numeroCidades;
 	int quantSusp;
-	int culpado[3];//Aqui guardaremos tres vari√°veis, 1.Quem √©, 2.Em que lugar, 3.Em qual POI
+	int culpado[3];//Aqui guardaremos tres vari·veis, 1.Quem È, 2.Em que lugar, 3.Em qual POI
 	int tempoEntreLocais;
 	int tempoParaPOI;
 	int tempoDeSolucao;
@@ -99,7 +99,7 @@ void newPersona();
 int oldPersona(tipoPersonagem* personagem);
 int checkCarac(QualCaracteristica caracteristica, bool playing);
 void rightTime(int tempo);
-void writeout(char*, bool, bool);
+void writeout(char*, bool, bool, bool);
 int returncustomtimer(char);
 int checkforcommand(char*, int);
 Nivel returnLevel(int lv);
@@ -155,6 +155,7 @@ int main()
 	FILE *casoatualDesc;
 	int casoparaloadar = 1;
 	bool gameover = false;
+	bool ReadingAgain = false;
 	int temporestante;
 	int cidadeatual = 0;
 	int opcaoemopcao;
@@ -177,10 +178,10 @@ int main()
 	do {
 		system("cls");
 		system("color F0");
-		printf("\n\tBem vindo ao jogo \"Onde no Universo do Cinema/S√©rie est√° Carmen Sandiego?\"!");
-		printf("\n\tEscolha uma das op√ß√µes abaixo:\n\t(Caso voc√™ seja iniciante, √© altamente recomendado a leitura do tutorial!)\n\n\t");
+		printf("\n\tBem vindo ao jogo \"Onde no Universo do Cinema/SÈrie est· Carmen Sandiego?\"!");
+		printf("\n\tEscolha uma das opÁıes abaixo:\n\t(Caso vocÍ seja iniciante, È altamente recomendado a leitura do tutorial!)\n\n\t");
 		printMenu(75, false, false);
-		printf("\t1. Administrador\n\t2. Jogador\n\t3. Tutorial\n\t4. Cr√©ditos\n\t5. Sair\n\n\tOp√ß√£o: \n\t");
+		printf("\t1. Administrador\n\t2. Jogador\n\t3. Tutorial\n\t4. CrÈditos\n\t5. Sair\n\n\tOpÁ„o: \n\t");
 		printMenu(75, true, false);		
 		scanf("%i", &log);
 
@@ -192,8 +193,8 @@ int main()
 				do {
 					system("cls");
 					/*system("color 04");*///Sentirei saudades!! 
-					printf("\n\tOp√ß√£o escolhida: 1. Administrador\n\tEscolha uma das op√ß√µes abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Login do Administrador\n\t3. Retornar ao menu anterior\n\n\tOpcao desejada: ");
-					scanf("%i", &casesadm); //Escolher op√ß√£o de adm
+					printf("\n\tOpÁ„o escolhida: 1. Administrador\n\tEscolha uma das opÁıes abaixo:\n\n\t1. Cadastro de Administrador\n\t2. Login do Administrador\n\t3. Retornar ao menu anterior\n\n\tOpcao desejada: ");
+					scanf("%i", &casesadm); //Escolher opÁ„o de adm
 					if (casesadm > 0 && casesadm < 4)
 					{
 						switch (casesadm)
@@ -205,14 +206,14 @@ int main()
 							if (admin != NULL)
 							{
 								fclose(admin);
-								printf("\n\tAdministrador j√° cadastrado! Desculpe\n\tRetornando ao menu...");
+								printf("\n\tAdministrador j· cadastrado! Desculpe\n\tRetornando ao menu...");
 								Sleep(3000);
 							}
 							else
 							{
 								//	fclose(admin);
 
-								printf("\n\tOp√ß√£o 1. Cadastro de Administrador:\n\n\tNome: ");
+								printf("\n\tOpÁ„o 1. Cadastro de Administrador:\n\n\tNome: ");
 								getchar();
 								fgets(adm.nome, 30, stdin);
 								printf("\n\tLogin: ");
@@ -241,13 +242,13 @@ int main()
 							admin = fopen("logincripto.dat", "rb");
 							if (admin == NULL)
 							{
-								printf("\n\t √â necess√°rio o cadastro de administrador primeiro!");
+								printf("\n\t … necess·rio o cadastro de administrador primeiro!");
 								Sleep(1000);
 							}
 							else
 							{
 								fclose(admin);
-								printf("\n\tOp√ß√£o 2. Login Administrativo:\n\n\tDigite o login atual: ");
+								printf("\n\tOpÁ„o 2. Login Administrativo:\n\n\tDigite o login atual: ");
 								getchar();
 								fgets(adm.login, 30, stdin);
 								printf("\n\tSenha atual: ");
@@ -264,10 +265,10 @@ int main()
 								fclose(admin);
 								system("cls");
 
-								if (strcmp(cmp.login, aux.login) == 0 && strcmp(cmp.senha, aux.senha) == 0) //Checa se o login √© valido e bate com o salvo no arquivo de players
+								if (strcmp(cmp.login, aux.login) == 0 && strcmp(cmp.senha, aux.senha) == 0) //Checa se o login È valido e bate com o salvo no arquivo de players
 								{
 									do {
-										printf("\n\tLogin bem sucedido!\n\tSr(a) %s\tQuais das op√ß√µes deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha", aux.nome);
+										printf("\n\tLogin bem sucedido!\n\tSr(a) %s\tQuais das opÁıes deseja executar?\n\n\t1. Alterar nome\n\t2. Alterar login\n\t3. Alterar senha", aux.nome);
 										printf("\n\t4. Cadastrar caso\n\t5. Cadastrar personagem\n\t6. Excluir credencial de administrador\n\t7. Sair\n\n\tOpcao desejada: ");
 										scanf("%i", &casesloginadm);
 										system("cls");
@@ -278,11 +279,11 @@ int main()
 										else
 											fread(&aux, sizeof(adminType), 1, admin);
 
-										switch (casesloginadm) //Op√ß√µes de adm
+										switch (casesloginadm) //OpÁıes de adm
 										{
 										case chgn://Troca de nome
 
-											printf("\n\tOp√ß√£o 1.2.1. Alterar nome:\n\n\tDigite o novo nome: ");
+											printf("\n\tOpÁ„o 1.2.1. Alterar nome:\n\n\tDigite o novo nome: ");
 											getchar();
 											fgets(adm.nome, 30, stdin);
 											strcpy(aux.nome, adm.nome);
@@ -292,7 +293,7 @@ int main()
 
 										case chgl://Troca de login
 
-											printf("\n\tOp√ß√£o 1.2.2. Alterar login:\n\n\tDigite o novo login: ");
+											printf("\n\tOpÁ„o 1.2.2. Alterar login:\n\n\tDigite o novo login: ");
 											getchar();
 											fgets(adm.login, 30, stdin);
 											cripto(adm.keycripto, adm.login, aux.login);
@@ -302,7 +303,7 @@ int main()
 
 										case chgs://Troca de senha
 
-											printf("\n\tOp√ß√£o 1.2.3. Alterar senha:\n\n\tDigite a nova senha: ");
+											printf("\n\tOpÁ„o 1.2.3. Alterar senha:\n\n\tDigite a nova senha: ");
 											getchar();
 											fgets(adm.senha, 30, stdin);
 											cripto(adm.keycripto, adm.senha, aux.senha);
@@ -317,10 +318,10 @@ int main()
 
 											casos = fopen("casos.dat", "a + b");
 
-											//Cadastro do caso come√ßa aqui 
+											//Cadastro do caso comeÁa aqui 
 
 											system("cls");
-											printf("\n\tOp√ß√£o 1.2.4. Cadastrar casos:");
+											printf("\n\tOpÁ„o 1.2.4. Cadastrar casos:");
 											printf("\n\n\tPrimeiro digite o nome do caso (MAX 40 caracteres): ");
 											getchar();
 											fgets(caso.nomeCaso, 40, stdin);
@@ -334,21 +335,21 @@ int main()
 											Sleep(1000);
 											system("cls");
 
-											printf("\n\n\tDigite a hist√≥ria do caso \"%s\" (MAX 999 caracteres): ", caso.nomeCaso);
+											printf("\n\n\tDigite a histÛria do caso \"%s\" (MAX 999 caracteres): ", caso.nomeCaso);
 											fgets(caso.historiaGeral, 999, stdin);
 
-											printf("\n\tHist√≥ria cadastrada com sucesso! Aguarde um momento....");
+											printf("\n\tHistÛria cadastrada com sucesso! Aguarde um momento....");
 											Sleep(2000);
 
 											quantidade = 1;
 											contaCidade = 0;
-											do //Locais, POIs , dicas e quem d√° as dicas
+											do //Locais, POIs , dicas e quem d· as dicas
 											{
 												system("cls");
 
-												printf("\n\tAgora digite as localidades que far√£o parte do caso: ");
-												printf("\n\tLembre-se que o primeiro local ser√° o local inicial, ou seja, ");
-												printf("\n\to local que o jogador come√ßar√°.");
+												printf("\n\tAgora digite as localidades que far„o parte do caso: ");
+												printf("\n\tLembre-se que o primeiro local ser· o local inicial, ou seja, ");
+												printf("\n\to local que o jogador comeÁar·.");
 												printf("\n\tPara encerrar o cadastro digite 'Sair'. (MAX 30 cidades e 50 caracteres)");
 												printf("\n\n\tDigite o nome do local %i: ", quantidade);
 												fgets(caso.cidades[contaCidade], 50, stdin); //30 cidades 50 caracteres
@@ -364,11 +365,11 @@ int main()
 														if (quantidade == 31)
 														{
 															system("cls");
-															printf("\n\tLimite m√°ximo de locais atingido! Aguarde enquanto vamos ao pr√≥ximo passo...");
+															printf("\n\tLimite m·ximo de locais atingido! Aguarde enquanto vamos ao prÛximo passo...");
 														}
 														else
 														{
-															printf("\n\tAguarde enquanto lhe redirecionamos ao pr√≥ximo passo...");
+															printf("\n\tAguarde enquanto lhe redirecionamos ao prÛximo passo...");
 														}
 														caso.numeroCidades = quantidade - 1;
 														Sleep(2000);
@@ -396,7 +397,7 @@ int main()
 														printf("\n\n\tPista %i do local \"%s\" (MAX 999 carac.): ", j + 1, caso.cidades[contaCidade]);
 														fgets(caso.pistas[(3 * contaCidade) + j], 999, stdin);
 
-														printf("\n\n\tNome de quem dar√° a pista %i (MAX 50 carac.): ", j + 1);
+														printf("\n\n\tNome de quem dar· a pista %i (MAX 50 carac.): ", j + 1);
 														fgets(caso.pessoaDica[(3 * contaCidade) + j], 50, stdin);
 														for (int t = 0; t < strlen(caso.pessoaDica[(3 * contaCidade) + j]); t++)
 														{
@@ -411,7 +412,7 @@ int main()
 													quantidade++;
 											} while (true);
 											system("cls");
-											do {//"coordenadas" da cidade e do POI que o culpado est√°
+											do {//"coordenadas" da cidade e do POI que o culpado est·
 												for (int t = 0; t < caso.numeroCidades; t++)
 												{
 													printf("\n\t%i . %s", t+1, caso.cidades[t]);
@@ -421,10 +422,10 @@ int main()
 													}
 													printf("\n");
 												}
-												printf("\n\tInforme agora os n√∫meros(separados por ponto) X.Y:");
-												printf("\n\tX - O n√∫mero da cidade onde o culpado estar√°;");
-												printf("\n\tY - O n√∫mero do ponto de interesse em que o culpado estar√°");
-												printf("\n\tExemplos de entrada: 1.3 , 12.2 , 2.1\n\tOp√ß√£o: ");
+												printf("\n\tInforme agora os n˙meros(separados por ponto) X.Y:");
+												printf("\n\tX - O n˙mero da cidade onde o culpado estar·;");
+												printf("\n\tY - O n˙mero do ponto de interesse em que o culpado estar·");
+												printf("\n\tExemplos de entrada: 1.3 , 12.2 , 2.1\n\tOpÁ„o: ");
 												scanf("%s", texto);											
 												caso.culpado[1] = texto[0] - 49;
 												if (texto[1] != '.')
@@ -437,28 +438,28 @@ int main()
 													caso.culpado[2] = texto[2] - 49;
 												}	
 												system("cls");
-												printf("\n\tDigite um valor v√°lido!");
+												printf("\n\tDigite um valor v·lido!");
 											} while ((caso.culpado[1] > caso.numeroCidades || caso.culpado[1] < 0) && !(caso.culpado[2] < 3 && caso.culpado[2] > -1));
 											getchar();
-											//Cadastro da descri√ß√£o
+											//Cadastro da descriÁ„o
 											for (i = 0; i < quantidade - 1; i++)
 											{
 												system("cls");
-												printf("\n\tCadastre agora a descri√ß√£o / hist√≥ria de cada local (MAX 999 Caracteres):");
-												printf("\n\n\tHist√≥ria do local %s: ", caso.cidades[i]);
+												printf("\n\tCadastre agora a descriÁ„o / histÛria de cada local (MAX 999 Caracteres):");
+												printf("\n\n\tHistÛria do local %s: ", caso.cidades[i]);
 												fgets(caso.historiaCidade[i], 999, stdin);
 											}
 
 											system("cls");
 
-											printf("\n\tLocais conclu√≠dos com sucesso!");
-											printf("\n\n\tDigite a op√ß√£o desejada: \n");
+											printf("\n\tLocais concluÌdos com sucesso!");
+											printf("\n\n\tDigite a opÁ„o desejada: \n");
 											printf("\n\t1.Cadastrar novos personagens");
-											printf("\n\t2.Usar personagens j√° cadastrados");
-											printf("\n\n\tOp√ß√£o: ");
+											printf("\n\t2.Usar personagens j· cadastrados");
+											printf("\n\n\tOpÁ„o: ");
 											scanf("%i", &matsf);
 
-											switch (matsf) //Escolhe se quer cadastrar nova pessoa ou se quer algu√©m cadastrado
+											switch (matsf) //Escolhe se quer cadastrar nova pessoa ou se quer alguÈm cadastrado
 											{
 											case cadastrarPersonagem:
 
@@ -475,7 +476,7 @@ int main()
 												break;
 											}
 											do {//Escolha do culpado
-												printf("\n\tQuem ser√° o culpado neste caso? (Conforme a tabela acima)\n\tOp√ß√£o: ");
+												printf("\n\tQuem ser· o culpado neste caso? (Conforme a tabela acima)\n\tOpÁ„o: ");
 												scanf("%i", &caso.culpado[0]);
 											} while (!(caso.culpado[0] > 0 && caso.culpado[0] < (qtdPersonas+1)));
 											caso.culpado[0]--;
@@ -483,21 +484,21 @@ int main()
 
 											do {//Dificuldade do caso
 												printf("\n\tQual a dificuldade do caso?");
-												printf("\n\t1. F√°cil (Para jogadores Novatos);");
-												printf("\n\t2. M√©dio (Para jogadores Experientes)");
-												printf("\n\t3. Dif√≠cil (Para jogadores Veteranos)");
-												printf("\n\tOp√ß√£o: ");
+												printf("\n\t1. F·cil (Para jogadores Novatos);");
+												printf("\n\t2. MÈdio (Para jogadores Experientes)");
+												printf("\n\t3. DifÌcil (Para jogadores Veteranos)");
+												printf("\n\tOpÁ„o: ");
 												scanf("%i", &caso.dificuldade);
 												system("cls");
-												printf("\n\tDigite um valor v√°lido!");
+												printf("\n\tDigite um valor v·lido!");
 											} while (!(caso.dificuldade > 0 && caso.dificuldade < 4));
 
 											system("cls");//Tempos
-											printf("\n\tQuanto tempo o jogador ter√° para solucionar este caso? (Em segundos)\n\tOp√ß√£o: ");
+											printf("\n\tQuanto tempo o jogador ter· para solucionar este caso? (Em segundos)\n\tOpÁ„o: ");
 											scanf("%i", &caso.tempoDeSolucao);
-											printf("\n\tQuanto tempo o jogador ter√° para viajar entre os locais? (Em segundos)\n\tOp√ß√£o: ");
+											printf("\n\tQuanto tempo o jogador ter· para viajar entre os locais? (Em segundos)\n\tOpÁ„o: ");
 											scanf("%i", &caso.tempoEntreLocais);
-											printf("\n\tQuanto tempo o jogador ter√° para visitar um ponto de interesse? (Em segundos)\n\tOp√ß√£o: ");
+											printf("\n\tQuanto tempo o jogador ter· para visitar um ponto de interesse? (Em segundos)\n\tOpÁ„o: ");
 											scanf("%i", &caso.tempoParaPOI);
 											system("cls");
 
@@ -518,7 +519,7 @@ int main()
 											
 											break;
 
-										case cadastropersonagem://Op√ß√£o para s√≥ cadastro de personagens
+										case cadastropersonagem://OpÁ„o para sÛ cadastro de personagens
 
 											fwrite(&aux, sizeof(adminType), 1, admin);
 											fclose(admin);
@@ -530,14 +531,14 @@ int main()
 
 										case deladm://deleta o adm atual
 
-											printf("\n\tOp√ß√£o 1.2.6. Excluir credencial de administrador:\n\tTem certeza desta op√ß√£o?(S/N): ");
+											printf("\n\tOpÁ„o 1.2.6. Excluir credencial de administrador:\n\tTem certeza desta opÁ„o?(S/N): ");
 											getchar();
 											scanf("%c", &resposta);
 
 											if (resposta == 'S' || resposta == 's')
 											{
 												fclose(admin);
-												printf("\n\tVoc√™ ser√° redirecionado para o menu administrativo em instantes...");
+												printf("\n\tVocÍ ser· redirecionado para o menu administrativo em instantes...");
 												Sleep(1500);
 												sairalteracaoadm = true;
 												remove("logincripto.dat");
@@ -575,7 +576,7 @@ int main()
 					}
 					else
 					{
-						printf("\n\n\tOp√ß√£o inv√°lida! Tente novamente em instantes...");
+						printf("\n\n\tOpÁ„o inv·lida! Tente novamente em instantes...");
 						Sleep(2000);
 					}
 				} while (returntomenu == false);
@@ -586,9 +587,9 @@ int main()
 				do {
 					system("cls");
 
-					printf("\n\tOp√ß√£o escolhida: 2. Jogador\n\tEscolha uma das op√ß√µes abaixo:\n\n\t");
+					printf("\n\tOpÁ„o escolhida: 2. Jogador\n\tEscolha uma das opÁıes abaixo:\n\n\t");
 					printMenu(75, false, false);
-					printf("\t1. Cadastrar novo jogador\n\t2. Login Jogador\n\t3. Ranking Geral\n\t4. Retornar ao menu anterior\n\n\tOp√ß√£o: \n\t");
+					printf("\t1. Cadastrar novo jogador\n\t2. Login Jogador\n\t3. Ranking Geral\n\t4. Retornar ao menu anterior\n\n\tOpÁ„o: \n\t");
 					printMenu(75, true, false);
 					scanf("%i", &opcaojogador);
 
@@ -599,10 +600,10 @@ int main()
 					{
 					case cadastroJogador: //-------------------------------------------------CADASTRO JOGADOR INICIO
 
-						printf("\n\tOp√ß√£o 1. Cadastro novo Jogador:\n\n\tDigite seu primeiro nome: ");
+						printf("\n\tOpÁ„o 1. Cadastro novo Jogador:\n\n\tDigite seu primeiro nome: ");
 						scanf("%s", jogador.nome);
 
-						do  //INICIO VERIFICA√á√ÉO NOME EXISTENTE
+						do  //INICIO VERIFICA«√O NOME EXISTENTE
 						{
 							rewind(players);
 
@@ -627,18 +628,18 @@ int main()
 							{
 								system("cls");
 
-								printf("\n\tNome j√° cadastrado!\n");
+								printf("\n\tNome j· cadastrado!\n");
 								printf("\n\tTente digitar diferente: ");
 								scanf("%s", jogador.nome);
 							}
 
-						} while (login == false);  //FIM VERIFICA√á√ÉO NOME EXISTENTE
+						} while (login == false);  //FIM VERIFICA«√O NOME EXISTENTE
 
 
 						printf("\n\tDigite seu login: ");
 						scanf("%s", jogador.login);
 
-						do  //INICIO VERIFICA√á√ÉO LOGIN EXISTENTE
+						do  //INICIO VERIFICA«√O LOGIN EXISTENTE
 						{
 							rewind(players);
 
@@ -663,12 +664,12 @@ int main()
 							{
 								system("cls");
 
-								printf("\n\tLogin j√° cadastrado!\n");
+								printf("\n\tLogin j· cadastrado!\n");
 								printf("\n\tDigite outro login: ");
 								scanf("%s", jogador.login);
 							}
 
-						} while (login == false);  //FIM VERIFICA√á√ÉO LOGIN EXISTENTE
+						} while (login == false);  //FIM VERIFICA«√O LOGIN EXISTENTE
 
 						printf("\n\tDigite sua senha: ");
 						scanf("%s", jogador.senha);
@@ -699,7 +700,7 @@ int main()
 						fread(&jogador, sizeof(jogador), 1, players);
 						if (feof(players))
 						{
-							printf("\n\tN√£o h√° jogadores cadastrados! Fa√ßa j√° o seu cadastro!");
+							printf("\n\tN„o h· jogadores cadastrados! FaÁa j· o seu cadastro!");
 							Sleep(2000);
 						}
 						else
@@ -709,7 +710,7 @@ int main()
 
 								system("cls");
 
-								printf("\n\tOp√ß√£o 2. Login Jogador:\n\n\tDigite seu login: ");
+								printf("\n\tOpÁ„o 2. Login Jogador:\n\n\tDigite seu login: ");
 								scanf("%s", &auxlogin.login);
 
 								do {
@@ -731,7 +732,7 @@ int main()
 								{
 									rewind(players);
 									system("cls");
-									printf("\n\tLogin Inv√°lido...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
+									printf("\n\tLogin Inv·lido...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
 									getchar();
 									scanf("%c", &resposta);
 
@@ -753,7 +754,7 @@ int main()
 								{
 									system("cls");
 
-									printf("\n\tOl√° %s\n", jogador.nome);
+									printf("\n\tOl· %s\n", jogador.nome);
 									printf("\n\tDigite sua senha: ");
 									scanf("%s", &auxlogin.senha);
 
@@ -761,7 +762,7 @@ int main()
 									{
 										system("cls");
 										printf("\n\tLogin efetuado com sucesso!");
-										printf("\n\n\tCarregando p√°gina jogador...\n");
+										printf("\n\n\tCarregando p·gina jogador...\n");
 										Sleep(1500);
 										logou = true;
 										break;
@@ -771,7 +772,7 @@ int main()
 										rewind(players);
 
 										system("cls");
-										printf("\n\tSenha Inv√°lida...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
+										printf("\n\tSenha Inv·lida...\n\n\tDeseja tentar novamente? (S / N)\n\n\tResposta: ");
 										getchar();
 										scanf("%c", &resposta);
 									}
@@ -790,33 +791,33 @@ int main()
 										printf("\n\tBem vindo %s!", jogador.nome);
 										printf("\n\t");
 										printMenu(30, false, false);
-										printf("\tAtualmente voc√™ tem %i ponto(s)", jogador.pontos);
+										printf("\tAtualmente vocÍ tem %i ponto(s)", jogador.pontos);
 										switch (returnLevel(jogador.pontos))
 										{
-										case Novato:printf("\n\n\tSeu n√≠vel √©: Novato");
+										case Novato:printf("\n\n\tSeu nÌvel È: Novato");
 											break;
-										case Experiente:printf("\n\n\tSeu n√≠vel √©: Experiente");
+										case Experiente:printf("\n\n\tSeu nÌvel È: Experiente");
 											break;
-										case Veterano:printf("\n\n\tSeu n√≠vel √©: Veterano");
+										case Veterano:printf("\n\n\tSeu nÌvel È: Veterano");
 											break;
 										}
 										printf("\n\t");
 										printMenu(30, false, false);
-										printf("\n\tEscolha uma das op√ß√µes abaixo:");
+										printf("\n\tEscolha uma das opÁıes abaixo:");
 										printf("\n\n\t1.Alterar Cadastro");
 										if (jogador.saved == false)
 										{
 											printf("\n\t2. - Slot vazio - (Sem jogo salvo)");
 											printf("\n\t3.Jogar");
 											printf("\n\t4.Log out");
-											printf("\n\n\tOp√ß√£o desejada: ");
+											printf("\n\n\tOpÁ„o desejada: ");
 										}
 										else
 										{
 											printf("\n\t2.Carregar jogo salvo");
 											printf("\n\t3.Jogar");
 											printf("\n\t4.Log out");
-											printf("\n\n\tOp√ß√£o desejada: ");
+											printf("\n\n\tOpÁ„o desejada: ");
 
 										}
 										scanf("%i", &jorge);
@@ -824,12 +825,12 @@ int main()
 										if (!jogador.saved && jorge == 2)
 										{
 											system("cls");
-											printf("\n\tVoc√™ n√£o tem um jogo salvo! Escolha outra op√ß√£o...");
+											printf("\n\tVocÍ n„o tem um jogo salvo! Escolha outra opÁ„o...");
 											Sleep(1500);
 										}
 										if (jogador.saved && jorge == 3)
 										{
-											printf("\n\tVoc√™ perder√° o jogo salvo, deseja proceder?\n\tOp√ß√£o(S/N): ");
+											printf("\n\tVocÍ perder· o jogo salvo, deseja proceder?\n\tOpÁ„o(S/N): ");
 											getchar();
 											scanf("%c", &resposta);
 											if ((resposta == 's' || resposta == 'S'))
@@ -840,7 +841,7 @@ int main()
 										if (!(jorge > 0 && jorge < 5))
 										{
 											system("cls");
-											printf("\n\tDigite uma op√ß√£o v√°lida!");
+											printf("\n\tDigite uma opÁ„o v·lida!");
 											Sleep(1500);
 										}
 									} while (!(jorge > 0 && jorge < 5) || (resposta == 'n' || resposta == 'N') || (!jogador.saved && jorge == 2));
@@ -862,13 +863,13 @@ int main()
 												system("cls");
 
 												printf("\n\tSeja bem vindo %s", jogador.nome);
-												printf("\n\n\tPor gentileza insira a op√ß√£o desejada:");
+												printf("\n\n\tPor gentileza insira a opÁ„o desejada:");
 												printf("\n\n\t1. Alterar nome");
 												printf("\n\t2. Alterar login");
 												printf("\n\t3. Alterar senha");
 												printf("\n\t4. Excluir conta");
 												printf("\n\t5. Voltar");
-												printf("\n\n\tDigite a op√ß√£o desejada: ");
+												printf("\n\n\tDigite a opÁ„o desejada: ");
 												scanf("%i", &change);
 
 												switch (change)
@@ -879,11 +880,11 @@ int main()
 
 													system("cls");
 
-													printf("\n\tOp√ß√£o escolhida 1.Alterar nome");
+													printf("\n\tOpÁ„o escolhida 1.Alterar nome");
 													printf("\n\n\tDigite o novo nome: ");
 													scanf("%s", &player.nome);
 
-													do  //INICIO VERIFICA√á√ÉO NOME EXISTENTE
+													do  //INICIO VERIFICA«√O NOME EXISTENTE
 													{
 														rewind(players);
 
@@ -907,7 +908,7 @@ int main()
 														{
 															system("cls");
 
-															printf("\n\tNome j√° cadastrado!\n");
+															printf("\n\tNome j· cadastrado!\n");
 															printf("\n\tTente digitar um nome diferente: ");
 															scanf("%s", player.nome);
 														}
@@ -972,14 +973,14 @@ int main()
 
 													system("cls");
 
-													printf("\n\tOp√ß√£o escolhida 2.Alterar alterar login");
+													printf("\n\tOpÁ„o escolhida 2.Alterar alterar login");
 													printf("\n\n\tDigite o novo login: ");
 													scanf("%s", &player.login);
 
 													fclose(players);
 													players = fopen("players.dat", "a+b");
 
-													do  //INICIO VERIFICA√á√ÉO NOME EXISTENTE
+													do  //INICIO VERIFICA«√O NOME EXISTENTE
 													{
 														rewind(players);
 
@@ -1003,7 +1004,7 @@ int main()
 														{
 															system("cls");
 
-															printf("\n\n\tLogin j√° cadastrado!\n");
+															printf("\n\n\tLogin j· cadastrado!\n");
 															printf("\n\tTente digitar um login diferente: ");
 															scanf("%s", player.login);
 														}
@@ -1068,7 +1069,7 @@ int main()
 
 													system("cls");
 
-													printf("\n\tOp√ß√£o escolhida 3.Alterar senha");
+													printf("\n\tOpÁ„o escolhida 3.Alterar senha");
 													printf("\n\n\tDigite a nova senha: ");
 													scanf("%s", &player.senha);
 
@@ -1131,7 +1132,7 @@ int main()
 
 													printf("\n\tTem certeza que deseja excluir a conta?");
 													printf("\n\n\t1. Sim");
-													printf("\n\t2. N√£o\n\n\tOp√ß√£o: ");
+													printf("\n\t2. N„o\n\n\tOpÁ„o: ");
 													scanf("%i", &change);
 
 													if (change == 2)
@@ -1195,9 +1196,9 @@ int main()
 															{
 																system("cls");
 
-																printf("\n\tSenha inv√°lida, deseja digitar novamente?");
+																printf("\n\tSenha inv·lida, deseja digitar novamente?");
 																printf("\n\n\t1. Sim");
-																printf("\n\t2. N√£o\n\n\tOp√ß√£o: ");
+																printf("\n\t2. N„o\n\n\tOpÁ„o: ");
 																scanf("%i", &change);
 
 																if (change == 2)
@@ -1252,7 +1253,7 @@ int main()
 										{
 											casoparaloadar = geraCaso(returnLevel(jogador.pontos), casoatualDesc);
 											rewind(casoatualDesc);
-											fseek(casoatualDesc, casoparaloadar * sizeof(tipoCaso), SEEK_SET);//Achar o caso espec√≠fico para carregar
+											fseek(casoatualDesc, casoparaloadar * sizeof(tipoCaso), SEEK_SET);//Achar o caso especÌfico para carregar
 											fread(&casoatual, sizeof(tipoCaso), 1, casoatualDesc);
 											temporestante = casoatual.tempoDeSolucao;
 											jogador.pessoacerta = false;
@@ -1264,33 +1265,60 @@ int main()
 											strcpy(jogador.cidadeAtual, casoatual.cidades[0]);
 										}
 										gameover = false;
+										ReadingAgain = false;
 										while (gameover == false && temporestante > 0 && jogador.saved == false) {
 											ingame = true;
 											system("cls");
 											printf("\n\t\t");
-											strcpy(texto, "Caso n√∫mero ");
-											writeout(texto, false, false);
-											printf("%i", casoparaloadar+1);
-											printf(". \"");
-											writeout(casoatual.nomeCaso, true, false);
-											printf("\"\n\n\t");
-											strcpy(texto, "Descri√ß√£o do caso: ");
-											writeout(texto, false, false);
-											writeout(casoatual.historiaGeral, false, true);
-											printf("\n");
-											printf("\t\t");
-											strcpy(texto, "Voc√™ est√° em ");
-											writeout(texto, false, false);
-											writeout(casoatual.cidades[cidadeatual], false, false);
-											printf("\n");
-											printf("\t");
-											strcpy(texto, "Descri√ß√£o deste local: ");
-											writeout(texto, false, false);
-											writeout(casoatual.historiaCidade[cidadeatual], false, true);
-											//printf("\t\tVoc√™ est√° em %s\n\n", casoatual.cidades[cidadeatual]); , false
+											if (ReadingAgain)
+											{
+												strcpy(texto, "Caso n˙mero ");
+												writeout(texto, false, false, true);
+												printf("%i", casoparaloadar + 1);
+												printf(". \"");
+												writeout(casoatual.nomeCaso, true, false, true);
+												printf("\"\n\n\t");
+												strcpy(texto, "DescriÁ„o do caso: ");
+												writeout(texto, false, false, true);
+												writeout(casoatual.historiaGeral, false, true, true);
+												printf("\n");
+												printf("\t\t");
+												strcpy(texto, "VocÍ est· em ");
+												writeout(texto, false, false, true);
+												writeout(casoatual.cidades[cidadeatual], false, false, true);
+												printf("\n");
+												printf("\t");
+												strcpy(texto, "DescriÁ„o deste local: ");
+												writeout(texto, false, false, true);
+												writeout(casoatual.historiaCidade[cidadeatual], false, true, true);
+											}
+											else
+											{
+												strcpy(texto, "Caso n˙mero ");
+												writeout(texto, false, false, false);
+												printf("%i", casoparaloadar + 1);
+												printf(". \"");
+												writeout(casoatual.nomeCaso, true, false, false);
+												printf("\"\n\n\t");
+												strcpy(texto, "DescriÁ„o do caso: ");
+												writeout(texto, false, false, false);
+												writeout(casoatual.historiaGeral, false, true, false);
+												printf("\n");
+												printf("\t\t");
+												strcpy(texto, "VocÍ est· em ");
+												writeout(texto, false, false, false);
+												writeout(casoatual.cidades[cidadeatual], false, false, false);
+												printf("\n");
+												printf("\t");
+												strcpy(texto, "DescriÁ„o deste local: ");
+												writeout(texto, false, false, false);
+												writeout(casoatual.historiaCidade[cidadeatual], false, true, false);
+												ReadingAgain = true;
+											}											
+											//printf("\t\tVocÍ est· em %s\n\n", casoatual.cidades[cidadeatual]); , false
 											printf("\n\n\t\t");
-											strcpy(texto, "Seu tempo restante √©: ");
-											writeout(texto, false, false);
+											strcpy(texto, "Seu tempo restante È: ");
+											writeout(texto, false, false, false);
 											rightTime(temporestante);
 											printf("\t\tO que deseja fazer?\n\n\t\t");
 											printMenu(70, false, true);
@@ -1298,7 +1326,7 @@ int main()
 											printf("\t\t2 - Viajar para outro local\n");
 											printf("\t\t3 - Atualizar o retrato falado\n");
 											printf("\t\t4 - Salvar e sair do jogo\n\n");
-											printf("\t\tOp√ß√£o:\n\t\t");
+											printf("\t\tOpÁ„o:\n\t\t");
 											printMenu(70, true, true);
 											scanf("%i", &opcaoemjogo);											
 											switch (opcaoemjogo) { //mudar para enum depois
@@ -1306,17 +1334,17 @@ int main()
 												stayinoption = true;
 												while (stayinoption) {
 													system("cls");
-													//printf("\t\tQual pista voc√™ deseja obter? (Pista 1, 2 ou 3, ou digite 4 para VOLTAR)\n");
-													//printf("\tSua op√ß√£o: ");
+													//printf("\t\tQual pista vocÍ deseja obter? (Pista 1, 2 ou 3, ou digite 4 para VOLTAR)\n");
+													//printf("\tSua opÁ„o: ");
 													printf("\n\t");
-													strcpy(texto, "Voc√™ est√° em ");
-													writeout(texto, false, false);
-													writeout(casoatual.cidades[cidadeatual], false, false);
+													strcpy(texto, "VocÍ est· em ");
+													writeout(texto, false, false, false);
+													writeout(casoatual.cidades[cidadeatual], false, false, false);
 													strcpy(texto, ", e pode procurar por pistas nos seguintes lugares:");
-													writeout(texto, false, false);
+													writeout(texto, false, false, false);
 													printf("\n\n\t\t");
-													strcpy(texto, "Seu tempo restante √©: ");
-													writeout(texto, false, false);
+													strcpy(texto, "Seu tempo restante È: ");
+													writeout(texto, false, false, false);
 													rightTime(temporestante);
 													printf("\n\t\t");
 													printMenu(70, false, true);
@@ -1324,14 +1352,14 @@ int main()
 													printf("\t\t2 - %s\n", casoatual.POI[cidadeatual * 3 + 1]);
 													printf("\t\t3 - %s\n", casoatual.POI[cidadeatual * 3 + 2]);
 													printf("\n\t\tOu digite 4 para VOLTAR");
-													printf("\n\n\t\tOp√ß√£o:\n\t\t");
+													printf("\n\n\t\tOpÁ„o:\n\t\t");
 													printMenu(70, true, true);
 													scanf("%i", &opcaoemopcao);
 													if (opcaoemopcao > 0 && opcaoemopcao < 4) {
 														printf("\n\t\t");
-														strcpy(texto, "Voc√™ vai para o(a) ");
-														writeout(texto, false, false);
-														writeout(casoatual.POI[cidadeatual * 3 + opcaoemopcao - 1], false, false);
+														strcpy(texto, "VocÍ vai para o(a) ");
+														writeout(texto, false, false, false);
+														writeout(casoatual.POI[cidadeatual * 3 + opcaoemopcao - 1], false, false, false);
 														if (cidadeatual == casoatual.culpado[1] && (opcaoemopcao - 1) == casoatual.culpado[2] && jogador.mandato == true)
 														{
 															if (jogador.pessoacerta == true)
@@ -1340,53 +1368,53 @@ int main()
 																stayinoption = false;
 																jogador.saved = false;
 																strcpy(texto, " e...");
-																writeout(texto, true, false);
+																writeout(texto, true, false, false);
 																system("cls");
 																printf("\n\n\t\t");
 																strcpy(texto, "Se depara com o(a) culpado(a), segundo seu retrato falado.");
-																writeout(texto, false, false);
+																writeout(texto, false, false, false);
 																printf("\n\t\t");
-																strcpy(texto, "Voc√™ conseguiu prender o culpado! Parab√©ns Sr(a). ");
-																writeout(texto, false, false);
-																writeout(jogador.nome, false, false);
+																strcpy(texto, "VocÍ conseguiu prender o culpado! ParabÈns Sr(a). ");
+																writeout(texto, false, false, false);
+																writeout(jogador.nome, false, false, false);
 																printf("\n\t\t");
 																switch (casoatual.dificuldade)
 																{
 																case 1:
 																	if (temporestante > casoatual.tempoDeSolucao / 2) {
 																		jogador.pontos += 2000;
-																		strcpy(texto, "Deste modo, voc√™ foi recompensado com 2000 pontos por\n\t\tacabar antes da metade do tempo!");
-																		writeout(texto, false, false);
+																		strcpy(texto, "Deste modo, vocÍ foi recompensado com 2000 pontos por\n\t\tacabar antes da metade do tempo!");
+																		writeout(texto, false, false, false);
 																	}
 																	else {
 																		jogador.pontos += 1000;
-																		strcpy(texto, "Deste modo, voc√™ foi recompensado com 1000 pontos!");
-																		writeout(texto, false, false);
+																		strcpy(texto, "Deste modo, vocÍ foi recompensado com 1000 pontos!");
+																		writeout(texto, false, false, false);
 																	}
 
 																	break;
 																case 2:
 																	if (temporestante > casoatual.tempoDeSolucao / 2) {
 																		jogador.pontos += 1000;
-																		strcpy(texto, "Deste modo, voc√™ foi recompensado com 1000 pontos por\n\t\tacabar antes da metade do tempo!");
-																		writeout(texto, false, false);
+																		strcpy(texto, "Deste modo, vocÍ foi recompensado com 1000 pontos por\n\t\tacabar antes da metade do tempo!");
+																		writeout(texto, false, false, false);
 																	}
 																	else {
 																		jogador.pontos += 500;
-																		strcpy(texto, "Deste modo, voc√™ foi recompensado com 500 pontos!");
-																		writeout(texto, false, false);
+																		strcpy(texto, "Deste modo, vocÍ foi recompensado com 500 pontos!");
+																		writeout(texto, false, false, false);
 																	}
 																	break;
 																case 3:
 																	if (temporestante > casoatual.tempoDeSolucao / 2) {
 																		jogador.pontos += 500;
-																		strcpy(texto, "Deste modo, voc√™ foi recompensado com 500 pontos por\n\t\tacabar antes da metade do tempo!");
-																		writeout(texto, false, false);
+																		strcpy(texto, "Deste modo, vocÍ foi recompensado com 500 pontos por\n\t\tacabar antes da metade do tempo!");
+																		writeout(texto, false, false, false);
 																	}
 																	else {
 																		jogador.pontos += 250;
-																		strcpy(texto, "Deste modo, voc√™ foi recompensado com 250 pontos!");
-																		writeout(texto, false, false);
+																		strcpy(texto, "Deste modo, vocÍ foi recompensado com 250 pontos!");
+																		writeout(texto, false, false, false);
 																	}
 																}
 
@@ -1397,49 +1425,51 @@ int main()
 																stayinoption = false;
 																jogador.saved = false;
 																strcpy(texto, " e...");
-																writeout(texto, true, false);
+																writeout(texto, true, false, false);
 																system("cls");
 																printf("\n\n\t\t");
 																strcpy(texto, "Se depara com o(a) culpado(a), segundo seu retrato falado.");
-																writeout(texto, false, false);
+																writeout(texto, false, false, false);
 																printf("\n\t\t");
-																strcpy(texto, "Voc√™ prendeu o suspeito por√©m ele(a) era inocente!");
-																writeout(texto, false, false);
+																strcpy(texto, "VocÍ prendeu o suspeito porÈm ele(a) era inocente!");
+																writeout(texto, false, false, false);
 																printf("\n\t\t");
-																strcpy(texto, "Isso n√£o deveria ter acontecido Sr(a). ");
-																writeout(texto, false, false);
-																writeout(jogador.nome, false, false);
+																strcpy(texto, "Isso n„o deveria ter acontecido Sr(a). ");
+																writeout(texto, false, false, false);
+																writeout(jogador.nome, false, false, false);
 																printf("\n\t\t");
 																switch (casoatual.dificuldade)
 																{
 																case 1:
 																	jogador.pontos += 50;
-																	strcpy(texto, "Mesmo assim, voc√™ foi recompensado com 50 pontos por\n\t\ttentar solucionar este caso!");
-																	writeout(texto, false, false);
+																	strcpy(texto, "Mesmo assim, vocÍ foi recompensado com 50 pontos por\n\t\ttentar solucionar este caso!");
+																	writeout(texto, false, false, false);
 
 																	break;
 																case 2:
 																	jogador.pontos += 25;
-																	strcpy(texto, "Mesmo assim, voc√™ foi recompensado com 25 pontos por\n\t\ttentar solucionar este caso!");
-																	writeout(texto, false, false);
+																	strcpy(texto, "Mesmo assim, vocÍ foi recompensado com 25 pontos por\n\t\ttentar solucionar este caso!");
+																	writeout(texto, false, false, false);
 																	break;
 																case 3:
 																	jogador.pontos += 10;
-																	strcpy(texto, "Mesmo assim, voc√™ foi recompensado com 10 pontos por\n\t\ttentar solucionar este caso!");
-																	writeout(texto, false, false);
+																	strcpy(texto, "Mesmo assim, vocÍ foi recompensado com 10 pontos por\n\t\ttentar solucionar este caso!");
+																	writeout(texto, false, false, false);
 																}
 															}
+															printf("\n\t\t");
+															system("pause");
 														}
 														else
 														{
-															strcpy(texto, ", e ent√£o, recebe uma pista.");
-															writeout(texto, false, false);
+															strcpy(texto, ", e ent„o, recebe uma pista.");
+															writeout(texto, false, false, false);
 															printf("\n\t\t");
-															writeout(casoatual.pessoaDica[cidadeatual * 3 + opcaoemopcao - 1], false, false);
+															writeout(casoatual.pessoaDica[cidadeatual * 3 + opcaoemopcao - 1], false, false, false);
 															strcpy(texto, " disse:");
-															writeout(texto, false, false);
+															writeout(texto, false, false, false);
 															printf("\n\n\t\t");
-															writeout(casoatual.pistas[cidadeatual * 3 + opcaoemopcao - 1], false, true);
+															writeout(casoatual.pistas[cidadeatual * 3 + opcaoemopcao - 1], false, true, false);
 															printf("\n\t\t");
 															system("pause");
 															temporestante -= casoatual.tempoParaPOI;
@@ -1450,7 +1480,7 @@ int main()
 														stayinoption = false;
 														system("cls");
 													}
-													else printf("\n\t\tPista inv√°lida\n");
+													else printf("\n\t\tPista inv·lida\n");
 												}
 												break;
 											case 2://Viajar para outra cidade
@@ -1458,11 +1488,11 @@ int main()
 												while (stayinoption) {
 													system("cls");
 													printf("\n\t\t");
-													strcpy(texto, "Para qual local voc√™ quer ir? (ou digite '0' para VOLTAR)");
-													writeout(texto, false, false);
+													strcpy(texto, "Para qual local vocÍ quer ir? (ou digite '0' para VOLTAR)");
+													writeout(texto, false, false, false);
 													printf("\n\t\t");
-													strcpy(texto, "Seu tempo restante √©: ");
-													writeout(texto, false, false);
+													strcpy(texto, "Seu tempo restante È: ");
+													writeout(texto, false, false, false);
 													rightTime(temporestante);
 													printf("\n\t\t");
 													printMenu(70, false, true);
@@ -1479,7 +1509,7 @@ int main()
 															naoContaEstaCidade = i;
 														}
 													}														
-													printf("\n\t\tOp√ß√£o:\n\t\t");
+													printf("\n\t\tOpÁ„o:\n\t\t");
 													printMenu(70, true, true);
 													scanf("%i", &opcaoemopcao);
 													if(opcaoemopcao == 0)
@@ -1491,17 +1521,17 @@ int main()
 														if (opcaoemopcao > 0 && opcaoemopcao < casoatual.numeroCidades + 1) {
 															printf("\n\n\t\t");
 															strcpy(texto, "Indo para ");
-															writeout(texto, false, false);
-															writeout(casoatual.cidades[opcaoemopcao - 1], false, false);
+															writeout(texto, false, false, false);
+															writeout(casoatual.cidades[opcaoemopcao - 1], false, false, false);
 															strcpy(texto, "...");
-															writeout(texto, true, false);
+															writeout(texto, true, false, false);
 
 															cidadeatual = opcaoemopcao - 1;
 															temporestante -= casoatual.tempoEntreLocais;
 															Sleep(1500);
 															stayinoption = false;
 														}
-														else printf("\n\tCidade inv√°lida\n");
+														else printf("\n\tCidade inv·lida\n");
 													}													
 												}
 												break;
@@ -1510,24 +1540,24 @@ int main()
 
 												while (stayinoption) {
 													system("cls");
-													printf("\n\t\tO retrato falado atual √©: \n\n\t\t");
+													printf("\n\t\tO retrato falado atual È: \n\n\t\t");
 													checkPerson tempcheck;
 
 													printMenu(70, false, true);
 													printf("\t\tSexo:             %s\n", tempcheck.sexo[jogador.retratoFalado.sexo - 1]);
 													printf("\t\tCor do cabelo:    %s\n", tempcheck.corCabelo[jogador.retratoFalado.corCabelo - 1]);
 													printf("\t\tHobby:            %s\n", tempcheck.hobby[jogador.retratoFalado.hobby - 1]);
-													printf("\t\tS√≠mbolo marcante: %s\n\t\t", tempcheck.feature[jogador.retratoFalado.feature - 1]);
+													printf("\t\tSÌmbolo marcante: %s\n\t\t", tempcheck.feature[jogador.retratoFalado.feature - 1]);
 													printMenu(70, false, true);
 
-													printf("\n\n\t\tQual caracter√≠stica voc√™ deseja atualizar?\n");
-													printf("\t\t1 - G√™nero\n");
+													printf("\n\n\t\tQual caracterÌstica vocÍ deseja atualizar?\n");
+													printf("\t\t1 - GÍnero\n");
 													printf("\t\t2 - Cor do cabelo\n");
 													printf("\t\t3 - Hobby\n");
-													printf("\t\t4 - S√≠mbolo marcante\n");
+													printf("\t\t4 - SÌmbolo marcante\n");
 													printf("\n\t\t5 ----- COMPUTAR -----\n\n");
 													printf("\t\t6 - VOLTAR\n");
-													printf("\n\n\t\tOp√ß√£o: ");
+													printf("\n\n\t\tOpÁ„o: ");
 
 													QualCaracteristica car;
 													scanf("%i", &car);
@@ -1544,8 +1574,8 @@ int main()
 													case Feature: jogador.retratoFalado.feature = newval;
 														break;
 													case 4: printf("\n\n\t\t");
-														strcpy(texto, "--------- Computando poss√≠veis suspeitos... ----------");
-														writeout(texto, false, false);
+														strcpy(texto, "--------- Computando possÌveis suspeitos... ----------");
+														writeout(texto, false, false, false);
 														printf("\n\n");
 														contaSuspeitos = 0;
 														MAXCaracts = 0;
@@ -1577,8 +1607,8 @@ int main()
 															{
 																printf("\t\t\t");
 																strcpy(texto, "-> ");
-																writeout(texto, false, false);
-																writeout(casoatual.personagens[k].nome, false, false);
+																writeout(texto, false, false, false);
+																writeout(casoatual.personagens[k].nome, false, false, false);
 																printf("\n");
 																strcpy(suspeitos[contaSuspeitos], casoatual.personagens[k].nome);
 																contaSuspeitos++;
@@ -1586,15 +1616,15 @@ int main()
 														}
 														printf("\n\n\t\t");
 														strcpy(texto, "------------  Fim da lista de suspeitos  ------------");
-														writeout(texto, false, false);
+														writeout(texto, false, false, false);
 														printf("\n");
 														if (contaSuspeitos == 1)
 														{
 															jogador.mandato = true;
 															printf("\n\n\t");
-															strcpy(texto, "Foi emitido o mandato de pris√£o para ");
-															writeout(texto, false, false);
-															writeout(suspeitos[0], false, false);
+															strcpy(texto, "Foi emitido o mandato de pris„o para ");
+															writeout(texto, false, false, false);
+															writeout(suspeitos[0], false, false, false);
 															jogador.pessoacerta = false;
 															for (int k = 0; k < casoatual.quantSusp; k++)
 															{
@@ -1613,7 +1643,7 @@ int main()
 														system("pause");
 														break;
 													case 5: stayinoption = false; break;
-													default: printf("\n\tCaracter√≠stica inv√°lida\n");
+													default: printf("\n\tCaracterÌstica inv·lida\n");
 														Sleep(1500);
 														break;
 													}													
@@ -1621,11 +1651,11 @@ int main()
 												break;
 											case 4://salvar jogo
 												system("cls");
-												printf("\n\t\tO que voc√™ deseja fazer?\n\n\t\t");
+												printf("\n\t\tO que vocÍ deseja fazer?\n\n\t\t");
 												printMenu(70, false, true);
 												printf("\t\t1 - Salvar o jogo e sair\n\t\t");
 												printf("2 - VOLTAR\n");
-												printf("\n\t\tOp√ß√£o:\n\t\t");
+												printf("\n\t\tOpÁ„o:\n\t\t");
 												printMenu(70, true, true);
 												scanf("%i", &opcaoemopcao);
 												if (opcaoemopcao == 1)
@@ -1640,7 +1670,7 @@ int main()
 													Sleep(1500);
 												}
 												break;
-											default: printf("Op√ß√£o n√£o reconhecida, tente novamente...");
+											default: printf("OpÁ„o n„o reconhecida, tente novamente...");
 												Sleep(2000);
 												break;
 											}
@@ -1648,7 +1678,7 @@ int main()
 										if (temporestante < 0)
 										{
 											system("cls");
-											printf("\n\tVoc√™ perdeu! Foi excedido o tempo limite do caso e por isso o culpado fugiu!\n\tVoltando ao menu do jogador...");
+											printf("\n\tVocÍ perdeu! Foi excedido o tempo limite do caso e por isso o culpado fugiu!\n\tVoltando ao menu do jogador...");
 											jogador.tempoAtual = 0;
 											Sleep(1500);
 										}
@@ -1752,7 +1782,7 @@ int oldPersona(tipoPersonagem* personagens)
 			if (!feof(fd))
 			{
 				printf("\t%i. %s do sexo %s, cabelo %s,", i + 1, intermediaria.nome, checarCaract.sexo[intermediaria.sexo - 1], checarCaract.corCabelo[intermediaria.corCabelo - 1]);
-				printf(" gosta de %s e seu s√≠mbolo marcante √© %s \n", checarCaract.hobby[intermediaria.hobby - 1], checarCaract.feature[intermediaria.feature - 1]);
+				printf(" gosta de %s e seu sÌmbolo marcante È %s \n", checarCaract.hobby[intermediaria.hobby - 1], checarCaract.feature[intermediaria.feature - 1]);
 				qtdPersonas++;
 
 				{
@@ -1767,10 +1797,10 @@ int oldPersona(tipoPersonagem* personagens)
 			i++;
 		} while (!feof(fd));
 
-		printf("\n\tDigite o n√∫mero ou digite '0' quando desejar parar (MAX 30 personagens): ");
+		printf("\n\tDigite o n˙mero ou digite '0' quando desejar parar (MAX 30 personagens): ");
 		j = 0;
 		do {
-			printf("\n\tOp√ß√£o: ");
+			printf("\n\tOpÁ„o: ");
 			scanf("%i", &recebeOpcao);
 			if (recebeOpcao > 0)
 			{
@@ -1787,10 +1817,10 @@ int oldPersona(tipoPersonagem* personagens)
 		for (i = 0; i < j; i++)
 		{
 			printf("\t%i . %s do sexo %s, cabelo %s,", i + 1, personagens[i].nome, checarCaract.sexo[personagens[i].sexo-1], checarCaract.corCabelo[personagens[i].corCabelo - 1]);
-			printf(" gosta de %s e seu s√≠mbolo marcante √© %s \n", checarCaract.hobby[personagens[i].hobby - 1], checarCaract.feature[personagens[i].feature - 1]);
+			printf(" gosta de %s e seu sÌmbolo marcante È %s \n", checarCaract.hobby[personagens[i].hobby - 1], checarCaract.feature[personagens[i].feature - 1]);
 		}
 		i = 0;
-		printf("\n\tDeseja refazer a lista de personagens envolvidos neste caso?\n\tOp√ß√£o(S/N): ");
+		printf("\n\tDeseja refazer a lista de personagens envolvidos neste caso?\n\tOpÁ„o(S/N): ");
 		getchar();
 		scanf("%c", &verificaListadePersonagem);
 		if (verificaListadePersonagem == 'n' || verificaListadePersonagem == 'N') 
@@ -1855,7 +1885,7 @@ void newPersona()
 		aux.hobby = checkCarac(Hobby, ingame);
 		system("cls");
 
-		printf("\n\tDigite um s√≠mbolo marcante do(a) %s, de acordo com a tabela: ", aux.nome);
+		printf("\n\tDigite um sÌmbolo marcante do(a) %s, de acordo com a tabela: ", aux.nome);
 		aux.feature = checkCarac(Feature, ingame);
 		system("cls");
 
@@ -1885,11 +1915,11 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 		{
 		case sexo:
 			do {
-				printf("\n\n\tSexos dispon√≠veis:\n\n\t1.Masculino;\n\t2.Feminino;\n\t3.  -  \n\n\tOp√ß√£o: ");
+				printf("\n\n\tSexos disponÌveis:\n\n\t1.Masculino;\n\t2.Feminino;\n\t3.  -  \n\n\tOpÁ„o: ");
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 3)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -1897,11 +1927,11 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 			return escolha;
 		case corDeCabelo:
 			do {
-				printf("\n\n\tCores de cabelo dispon√≠veis:\n\n\t1.Preto;\n\t2.Castanho;\n\t3.Loiro;\n\t4.Vermelho;\n\t5.Azul;\n\t6.Branco;\n\t7.  -  \n\n\tOp√ß√£o: ");
+				printf("\n\n\tCores de cabelo disponÌveis:\n\n\t1.Preto;\n\t2.Castanho;\n\t3.Loiro;\n\t4.Vermelho;\n\t5.Azul;\n\t6.Branco;\n\t7.  -  \n\n\tOpÁ„o: ");
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 7)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -1909,12 +1939,12 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 			return escolha;
 		case Hobby:
 			do {
-				printf("\n\n\tHobbies dispon√≠veis:\n\n\t1.Caminhar;\n\t2.Jogar;\n\t3.Tocar instrumento(s);\n\t4.Ler;\n\t5.Discutir;\n\t6.  -  \n\n\tOp√ß√£o: ");
+				printf("\n\n\tHobbies disponÌveis:\n\n\t1.Caminhar;\n\t2.Jogar;\n\t3.Tocar instrumento(s);\n\t4.Ler;\n\t5.Discutir;\n\t6.  -  \n\n\tOpÁ„o: ");
 				//{ "Caminhar", "Jogar", "Tocar instrumento", "Ler", "Discutir" };
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 6)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -1922,12 +1952,12 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 			return escolha;
 		case Feature:
 			do {
-				printf("\n\n\tS√≠mbolos marcantes dispon√≠veis:\n\n\t1.Chap√©u;\n\t2.Bon√©;\n\t3.Tatuagem;\n\t4.√ìculos;\n\t5.Pulseira;\n\t6.Anel;\n\t7.Colar;\n\t8.  -  \n\n\tOp√ß√£o: ");
-				//{"Chap√©u", "Bon√©", "Tatuagem", "√ìculos", "Pulseira", "Anel", "Colar"};
+				printf("\n\n\tSÌmbolos marcantes disponÌveis:\n\n\t1.ChapÈu;\n\t2.BonÈ;\n\t3.Tatuagem;\n\t4.”culos;\n\t5.Pulseira;\n\t6.Anel;\n\t7.Colar;\n\t8.  -  \n\n\tOpÁ„o: ");
+				//{"ChapÈu", "BonÈ", "Tatuagem", "”culos", "Pulseira", "Anel", "Colar"};
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 8)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -1941,11 +1971,11 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 		{
 		case sexo:
 			do {
-				printf("\n\n\tSexos dispon√≠veis:\n\n\t1.Masculino;\n\t2.Feminino\n\n\tOp√ß√£o: ");
+				printf("\n\n\tSexos disponÌveis:\n\n\t1.Masculino;\n\t2.Feminino\n\n\tOpÁ„o: ");
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 2)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -1953,11 +1983,11 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 			return escolha;
 		case corDeCabelo:
 			do {
-				printf("\n\n\tCores de cabelo dispon√≠veis:\n\n\t1.Preto;\n\t2.Castanho;\n\t3.Loiro;\n\t4.Vermelho;\n\t5.Azul;\n\t6.Branco\n\n\tOp√ß√£o: ");
+				printf("\n\n\tCores de cabelo disponÌveis:\n\n\t1.Preto;\n\t2.Castanho;\n\t3.Loiro;\n\t4.Vermelho;\n\t5.Azul;\n\t6.Branco\n\n\tOpÁ„o: ");
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 6)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -1965,12 +1995,12 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 			return escolha;
 		case Hobby:
 			do {
-				printf("\n\n\tHobbies dispon√≠veis:\n\n\t1.Caminhar;\n\t2.Jogar;\n\t3.Tocar instrumento(s);\n\t4.Ler;\n\t5.Discutir\n\n\tOp√ß√£o: ");
+				printf("\n\n\tHobbies disponÌveis:\n\n\t1.Caminhar;\n\t2.Jogar;\n\t3.Tocar instrumento(s);\n\t4.Ler;\n\t5.Discutir\n\n\tOpÁ„o: ");
 				//{ "Caminhar", "Jogar", "Tocar instrumento", "Ler", "Discutir" };
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 5)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -1978,12 +2008,12 @@ int checkCarac(QualCaracteristica caracteristica, bool playing) {
 			return escolha;
 		case Feature:
 			do {
-				printf("\n\n\tS√≠mbolos marcantes dispon√≠veis:\n\n\t1.Chap√©u;\n\t2.Bon√©;\n\t3.Tatuagem;\n\t4.√ìculos;\n\t5.Pulseira;\n\t6.Anel;\n\t7.Colar\n\n\tOp√ß√£o: ");
-				//{"Chap√©u", "Bon√©", "Tatuagem", "√ìculos", "Pulseira", "Anel", "Colar"};
+				printf("\n\n\tSÌmbolos marcantes disponÌveis:\n\n\t1.ChapÈu;\n\t2.BonÈ;\n\t3.Tatuagem;\n\t4.”culos;\n\t5.Pulseira;\n\t6.Anel;\n\t7.Colar\n\n\tOpÁ„o: ");
+				//{"ChapÈu", "BonÈ", "Tatuagem", "”culos", "Pulseira", "Anel", "Colar"};
 				scanf("%i", &escolha);
 				if (escolha < 1 || escolha > 7)
 				{
-					printf("\n\tDigite uma op√ß√£o v√°lida!");
+					printf("\n\tDigite uma opÁ„o v·lida!");
 					Sleep(1500);
 					system("cls");
 				}
@@ -2022,31 +2052,34 @@ void cripto(char* key, char* orig, char* cript) {
 void rightTime(int tempo) {
 	int temp = tempo / 86400;
 	printf("%02d ", temp);
-	writeout("dias", false, false);
+	writeout("dias", false, false, false);
 	tempo %= 86400;
 	temp = tempo / 3600;
 	printf(", %02d ", temp);
-	writeout("horas", false, false);
+	writeout("horas", false, false, false);
 	tempo %= 3600;
 	temp = tempo / 60;
 	printf(", %02d ", temp);
-	writeout("minutos", false, false);
+	writeout("minutos", false, false, false);
 	tempo %= 60;
 	printf(", %02d ", tempo);
-	writeout("segundos", false, false);
+	writeout("segundos", false, false, false);
 	printf("\n\n");
 }
 //INC
-void writeout(char* texto, bool pauseonnewline, bool newLineIndentation) {
+void writeout(char* texto, bool pauseonnewline, bool newLineIndentation, bool skip) {
 	bool backandforth = true, anotherOne = false;
 	int add, next=0;
 	for (unsigned int i = 0; i < strlen(texto); i++) {
 		if (pauseonnewline && texto[i] == '\n')
 			system("pause");
 		add = checkforcommand(texto, i);
-		if (add == 0) {
+		if (add == 0 && !skip) {
 			printf("%c", texto[i]);
 			Sleep(returncustomtimer(texto[i]));
+		}
+		if (skip) {
+			printf("%c", texto[i]);
 		}
 		if (newLineIndentation) {
 			next++;
@@ -2162,9 +2195,9 @@ int checkforcommand(char* texto, int curindex) {
 	 if (IsItTheEnd)
 	 {
 		 if(InGame)
-			 printf("\r\b\r\t\tOp√ß√£o: ");
+			 printf("\r\b\r\t\tOpÁ„o: ");
 		 else
-			 printf("\r\b\r\tOp√ß√£o: ");
+			 printf("\r\b\r\tOpÁ„o: ");
 	 }		 
 	 else
 		 printf("\n");
@@ -2178,7 +2211,7 @@ int checkforcommand(char* texto, int curindex) {
 			 printf("\n");
 		 printf("\t\t");
 		 printMenu(55, false, false);
-		 printf("\t\tOnde no Universo do Cinema/S√©rie est√° Carmen Sandiego?\n\t\t\7");	
+		 printf("\t\tOnde no Universo do Cinema/SÈrie est· Carmen Sandiego?\n\t\t\7");	
 		 printMenu(55, false, false);
 		 Sleep(50);
 	 }
@@ -2189,7 +2222,7 @@ int checkforcommand(char* texto, int curindex) {
 			 printf("\n");
 		 printf("\t\t");
 		 printMenu(55, false, false);
-		 printf("\t\tOnde no Universo do Cinema/S√©rie est√° Carmen Sandiego?\n\t\t\7");
+		 printf("\t\tOnde no Universo do Cinema/SÈrie est· Carmen Sandiego?\n\t\t\7");
 		 printMenu(55, false, false);
 		 for (int j = 0; j < (27-i); j++)
 			 printf("\n");

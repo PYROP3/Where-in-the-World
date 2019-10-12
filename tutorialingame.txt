@@ -1,0 +1,63 @@
+
+	**Baseado no jogo original "Where in the world is Carmen Sandiego"**
+
+	-----------------------------  Objetivo --------------------------------
+	
+		O objetivo do jogo eh encontrar o culpado pelos casos que serao 
+	propostos. Para isso voce deve viajar para os locais disponiveis em cada 
+	caso. Estes, por sua vez, apresentam 3 pontos de interesse onde voce 
+	(jogador), podera visitar para receber uma dica que podera ou nao, 
+	ajudar na resolucao do seu problema.
+
+		Voce tambem conta com a ajuda de um retrato falado para seguir
+	dicas que apontam para caracteristicas do culpado. Deste modo, ao adquirir
+	alguma caracteristica, voce podera complementar esse quadro e entao,
+	computar o retrato falado para mostrar os possiveis suspeitos respectivos
+	aos casos atuais. Quando um unico suspeito aparecer na opcao COMPUTAR,
+	sera emitido, imediatamente, um mandato de prisao para o mesmo e para 
+	finalizar o caso, voce devera procura-lo pelo universo do caso. So assim
+	voce sera capaz de solucionar o caso e entao receber sua recompensa.
+
+		Lembre-se tambem que, cada caso conta com um tempo limite para 
+	sua solucao e por isso voce deve cumprir com este prazo antes que seja
+	tarde demais.
+
+	--------------------------------------------------------------------------
+
+	
+	-----------------------------   Jogador  --------------------------------
+
+		Ao criar uma conta como jogador seu nivel e sua pontuacao estarao
+	zeradas. Para pontuar é preciso utilizar suas habilidades de detetive e
+	entao, concluir um caso. Ha a possibilidade de ganhar mais pontos do que
+	o normal caso conclua em menos que a metade do tempo proposto para aquele
+	caso. Ja se voce nao conseguiu concluir o caso, nao desanime, voce ainda 
+	ganhara uma pequena pontuacao por ter ao menos tentado!
+
+	--------------------------------------------------------------------------
+
+
+	------------------------- Pontuacao e nivel ------------------------------
+
+		A pontuacao eh a base para gerar o seu nivel, quanto mais pontos, 
+	maior o seu cargo na Interpol.
+
+	------- Cargo -------------------------------------- Pontuacao -----------
+
+		Novato  ---------------------------------->  0 a 1999 pontos
+
+		Experiente  ------------------------------>  2k a 3999 pontos
+
+		Veterano  -------------------------------->  a partir de 4k pontos
+
+	---------------------------------------------------------------------------
+
+	OBS: Para desfrutar melhor da experiencia deste jogo, recomendamos que
+	nao altere o tamanho da tela!
+
+ 
+	   Para maiores informacoes sobre este jogo, contacte os desenvolvedores!
+
+				Obrigado por jogar!
+
+				
